@@ -7,15 +7,19 @@ import { Module, MutationTree, ActionTree } from "vuex";
 const namespaced: boolean = true;
 
 export const rootState: OrganizationState = {
-  organization: null,
+  activeOrganization: null,
+  organizations: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
 };
 
 export const mutations: MutationTree<OrganizationState> = {
-  SET_ORGANIZATION(state: OrganizationState, payload: Organization) {
-    state.organization = payload;
+  SET_ACTIVE_ORGANIZATION(state: OrganizationState, payload: Organization) {
+    state.activeOrganization = payload;
+  },
+  SET_ORGANIZATIONS(state: OrganizationState, payload: Organization[]) {
+    state.organizations = payload;
   },
   SET_IS_LOADING(state: OrganizationState, payload: boolean) {
     state.isLoading = payload;
@@ -39,12 +43,27 @@ export const actions: ActionTree<OrganizationState, RootState> = {
         subdomain
       );
       if (data.success) {
-        commit("SET_ORGANIZATION", data.data);
+        commit("SET_ACTIVE_ORGANIZATION", data.data);
         resolve(data);
       } else {
         reject(false);
       }
     });
+  },
+  async getUserOrganizations({ commit, dispatch }) {
+    commit("SET_IS_LOADING", true);
+    const data = await new OrganizationsApi().getUserOrganizations();
+    if (data.success) {
+      commit("SET_IS_LOADING", false);
+      commit("SET_IS_SUCCESS", true);
+      commit("SET_ORGANIZATIONS", data.data);
+      if (data.data.length === 1) {
+        commit("SET_ACTIVE_ORGANIZATION", data.data[0]);
+      }
+    } else {
+      commit("SET_IS_LOADING", false);
+      commit("SET_IS_ERROR", true);
+    }
   },
   async getOrganizationById({ commit, dispatch }, { organizationId }) {
     commit("SET_IS_LOADING", true);
@@ -54,7 +73,7 @@ export const actions: ActionTree<OrganizationState, RootState> = {
     if (data.success) {
       commit("SET_IS_LOADING", false);
       commit("SET_IS_SUCCESS", true);
-      commit("SET_ORGANIZATION", data.data);
+      commit("SET_ACTIVE_ORGANIZATION", data.data);
     } else {
       commit("SET_IS_LOADING", false);
       commit("SET_IS_ERROR", true);

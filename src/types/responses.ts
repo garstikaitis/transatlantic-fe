@@ -1,4 +1,5 @@
 import { Organization, OrganizationUser } from "./organizations";
+import { Project } from "./projects";
 import { User } from "./user";
 
 export interface AuthenticateResponse extends BaseResponse {
@@ -35,4 +36,12 @@ export interface MeResponse extends BaseResponse {
 
 export interface GetOrganizationByIdResponse extends BaseResponse {
   data: Organization;
+}
+
+export interface GetProjectsResponse extends BaseResponse {
+  data: Project[];
+}
+
+export interface CreateProjectResponse extends BaseResponse {
+  data: Project;
 }

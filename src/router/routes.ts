@@ -3,7 +3,7 @@ import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import Onboarding from "@/views/Onboarding.vue";
-import Translations from "@/views/Translations.vue";
+import Projects from "@/views/Projects.vue";
 
 const routes: Array<RouteConfig> = [
   {
@@ -39,9 +39,9 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/translations",
-    name: "Translations",
-    component: Translations,
+    path: "/projects",
+    name: "Projects",
+    component: Projects,
     meta: {
       requiresAuth: true,
     },

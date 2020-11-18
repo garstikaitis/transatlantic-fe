@@ -27,6 +27,10 @@ export default class OrganizationsApi {
     });
     return data;
   }
+  async getUserOrganizations() {
+    const { data } = await axios.get("/organizations/user");
+    return data;
+  }
   async getOrganizationById(
     organizationId: number
   ): Promise<GetOrganizationByIdResponse> {

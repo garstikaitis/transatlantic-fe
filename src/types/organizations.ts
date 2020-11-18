@@ -5,7 +5,8 @@ export interface Organization {
 }
 
 export interface OrganizationState {
-  organization: Organization | null;
+  activeOrganization: Organization | null;
+  organizations: Organization[];
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;

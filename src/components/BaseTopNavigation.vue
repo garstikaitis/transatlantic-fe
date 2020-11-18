@@ -11,7 +11,8 @@
       <v-select
         label="name"
         @input="handleSelectedOrganization"
-        :options="organizations"
+        :options="organizationState.organizations"
+        :value="organizationState.activeOrganization"
         placeholder="Select organization"
       ></v-select>
     </div>
@@ -57,13 +58,15 @@ import { directive as onClickaway } from "vue-clickaway";
 export default class BaseTopNavigation extends Vue {
   @State("auth") auth!: AuthState;
   @State("organizations") organizationState!: OrganizationState;
-  @Getter("auth/userOrganizations") organizations!: Organization[];
 
-  @Mutation("organizations/SET_ORGANIZATION")
+  @Mutation("organizations/SET_ACTIVE_ORGANIZATION")
   SET_ACTIVE_ORGANIZATION!: (org: Organization) => void;
 
   @Action("logout", { namespace: "auth" })
   logout!: () => void;
+
+  @Action("getUserOrganizations", { namespace: "organizations" })
+  fetchUserOrganizations!: () => void;
 
   @Action("getOrganizationById", { namespace: "organizations" })
   getOrganizationById!: (input: { organizationId: number }) => void;
@@ -77,6 +80,9 @@ export default class BaseTopNavigation extends Vue {
   }
   hideTooltip() {
     this.showTooltip = false;
+  }
+  mounted() {
+    this.fetchUserOrganizations();
   }
 }
 </script>
