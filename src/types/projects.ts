@@ -1,3 +1,5 @@
+import { Locale } from "./locales";
+
 export interface ProjectsState {
   activeProject: Project | null;
   projects: Project[];
@@ -9,4 +11,5 @@ export interface ProjectsState {
 export interface Project {
   id: number;
   name: string;
+  locales: Locale[];
 }

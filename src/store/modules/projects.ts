@@ -1,4 +1,5 @@
 import ProjectsApi from "@/api/projects-api";
+import TranslationsApi from "@/api/translations-api";
 import { RootState } from "@/types/common";
 import { Project, ProjectsState } from "@/types/projects";
 import { Module, MutationTree, ActionTree } from "vuex";
@@ -44,6 +45,25 @@ export const actions: ActionTree<ProjectsState, RootState> = {
     if (data.success) {
       commit("SET_IS_LOADING", false);
       commit("SET_PROJECTS", data.data);
+    }
+  },
+  async fetchProject({ commit }, projectId) {
+    commit("SET_IS_LOADING", true);
+    const data = await new ProjectsApi().fetchProject(projectId);
+    if (data.success) {
+      commit("SET_IS_LOADING", false);
+      commit("SET_ACTIVE_PROJECT", data.data);
+    }
+  },
+  async deleteProject({ commit, state }, projectId) {
+    commit("SET_IS_LOADING", true);
+    const data = await new ProjectsApi().deleteProject(projectId);
+    if (data.success) {
+      commit("SET_IS_LOADING", false);
+      const projects = state.projects.filter(
+        (project) => project.id !== projectId
+      );
+      commit("SET_PROJECTS", projects);
     }
   },
 };

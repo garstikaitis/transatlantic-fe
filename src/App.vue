@@ -23,4 +23,7 @@ body {
 .vs__clear {
   display: none;
 }
+.w-max-content {
+  width: max-content;
+}
 </style>

@@ -21,14 +21,17 @@
     </router-link>
     <router-link :to="{ name: 'Projects' }">
       <div class="mb-6 relative">
-        <div v-if="$route.name === 'Projects'" class="activeIndicator"></div>
+        <div
+          v-if="$route.name.includes('Project')"
+          class="activeIndicator"
+        ></div>
         <eva-icon
           class="w-8 h-8"
           style="width: 40px; height: 30px;"
           :height="35"
           :width="35"
           name="pantone-outline"
-          :fill="$route.name === 'Projects' ? '#268D81' : '#6ABAB1'"
+          :fill="$route.name.includes('Project') ? '#268D81' : '#6ABAB1'"
         ></eva-icon>
       </div>
     </router-link>

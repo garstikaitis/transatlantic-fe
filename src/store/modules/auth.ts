@@ -18,7 +18,7 @@ export const getters: GetterTree<AuthState, RootState> = {
   isAuthenticated(state): boolean {
     return !!state?.user;
   },
-  userOrganizations(state): Organization[] {
+  userOrganizations(state): Organization[] | undefined {
     return state?.user?.organizations;
   },
 };
@@ -38,16 +38,24 @@ export const actions: ActionTree<AuthState, RootState> = {
     Cookies.set("access_token", data.access_token);
     commit("SET_USER", data.user);
     commit("SET_TOKEN", data.access_token);
-    if (data.user.onboardingCompleted) router.push({ name: "Dashboard" });
-    else router.push({ name: "Onboarding" });
+    if (data.user.onboardingCompleted) window.location.href = "/dashboard";
+    else window.location.href = "/onboarding";
   },
   async register({ commit, dispatch }, { email, password }) {
     const { data } = await new AuthApi().register(email, password);
     Cookies.set("access_token", data.access_token);
     commit("SET_USER", data.user);
     commit("SET_TOKEN", data.access_token);
-    if (data.user.onboardingCompleted) router.push({ name: "Dashboard" });
-    else router.push({ name: "Onboarding" });
+    if (data.user.onboardingCompleted) window.location.href = "/dashboard";
+    else window.location.href = "/onboarding";
+  },
+  async refreshToken({ commit, dispatch }) {
+    const { data } = await new AuthApi().refreshToken();
+    Cookies.set("access_token", data.access_token);
+    commit("SET_USER", data.user);
+    commit("SET_TOKEN", data.access_token);
+    if (data.user.onboardingCompleted) window.location.href = "/dashboard";
+    else window.location.href = "/onboarding";
   },
   async logout({ commit, dispatch }) {
     const { success } = await new AuthApi().logout();

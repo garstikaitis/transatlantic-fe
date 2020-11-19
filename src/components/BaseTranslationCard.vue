@@ -1,0 +1,130 @@
+<template>
+  <div class="mb-8 bg-white p-4">
+    <div class="text-green-600 font-semibold mb-2">{{ translationKey }}</div>
+    <div class="flex flex-col">
+      <div
+        class="flex"
+        v-for="(locale, key) in translationsMerged"
+        :key="locale.id"
+      >
+        <div class="w-64" :class="{ 'font-bold': locale.isMainLocale }">
+          {{ locale.locale }}
+        </div>
+        <div
+          class="max-w-lg cursor-pointer"
+          v-if="keyToEdit !== key"
+          @click="makeEditable(key, locale.value)"
+        >
+          {{ locale.value }}
+        </div>
+        <div class="flex" v-else v-on-clickaway="setEditableKeyToNull">
+          <base-input
+            :value="translationValueBeforeEdit"
+            @input="handleUpdateTranslation"
+          />
+          <base-button @click="saveTranslation(locale.localeId)" class="ml-2"
+            >Save</base-button
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { ProjectsState } from "@/types/projects";
+import { Translation, TranslationsState } from "@/types/translations";
+import { Component, Vue, Prop } from "vue-property-decorator";
+import { Action, State } from "vuex-class";
+import _uniqBy from "lodash/uniqBy";
+import { IRenderTranslation } from "@/types/common";
+// @ts-ignore
+import { directive as onClickaway } from "vue-clickaway";
+import { OrganizationState } from "@/types/organizations";
+import { AuthState } from "@/types/auth";
+import { UpdateTranslationRequest } from "@/types/requests";
+
+@Component({
+  name: "base-translation-card",
+  directives: { onClickaway: onClickaway },
+})
+export default class BaseTranslationCard extends Vue {
+  @Prop() translationGroup!: Translation[];
+  @Prop() translationKey!: string;
+  @State("projects") projectsState!: ProjectsState;
+  @State("translations") translationsState!: TranslationsState;
+  @State("organizations") organizationsState!: OrganizationState;
+  @State("auth") authState!: AuthState;
+
+  @Action("updateTranslation", { namespace: "translation" })
+  updateTranslation!: (input: UpdateTranslationRequest) => void;
+
+  keyToEdit: string | null = null;
+  translationValueBeforeEdit: string = "";
+  translationValueAfterEdit: string = "";
+
+  makeEditable(key: string, oldValue: string) {
+    this.translationValueBeforeEdit = oldValue;
+    this.keyToEdit = key;
+  }
+
+  handleUpdateTranslation(value: string) {
+    this.translationValueAfterEdit = value;
+  }
+
+  saveTranslation(localeId: number) {
+    const translation = this.translationsState.translations[
+      this.translationKey
+    ].find(
+      (translation) =>
+        translation.transValue === this.translationValueBeforeEdit
+    );
+    const input = {
+      transKey: this.translationKey,
+      transValue: this.translationValueAfterEdit,
+      localeId: localeId,
+      organizationId: this.organizationsState.activeOrganization!.id,
+      userId: this.authState.user!.id,
+      projectId: this.projectsState.activeProject!.id,
+    };
+    this.updateTranslation(input);
+    this.translationValueBeforeEdit = "";
+    this.translationValueAfterEdit = "";
+    this.keyToEdit = null;
+  }
+
+  setEditableKeyToNull() {
+    this.keyToEdit = null;
+  }
+
+  get translationsMerged() {
+    const obj: IRenderTranslation = {};
+    const mainLocale = this.projectsState.activeProject!.locales.find(
+      (locale) => locale.pivot.isMainLocale
+    );
+    this.translationGroup.forEach((translation) => {
+      obj[translation.locale.iso] = {
+        translationId: translation.id,
+        value: translation.transValue,
+        locale: translation.locale.name,
+        localeId: translation.localeId,
+        isMainLocale: translation.localeId === mainLocale!.id,
+      };
+    });
+    this.projectsState.activeProject!.locales.forEach((locale) => {
+      if (!obj[locale.iso]) {
+        obj[locale.iso] = {
+          translationId: null,
+          value: "Empty",
+          locale: locale.name,
+          localeId: locale.id,
+          isMainLocale: locale.id === mainLocale!.id,
+        };
+      }
+    });
+    return obj;
+  }
+}
+</script>
+
+<style scoped lang="scss"></style>

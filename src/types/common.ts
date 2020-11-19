@@ -7,3 +7,20 @@ export interface RootState {
   organizations: OrganizationState;
   projects: ProjectsState;
 }
+
+export interface EloquentModel {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
+}
+
+export interface IRenderTranslation extends Record<string, any> {
+  [key: string]: {
+    translationId: number | null;
+    value: string;
+    locale: string;
+    localeId: number;
+    isMainLocale: boolean;
+  };
+}

@@ -1,7 +1,7 @@
 <template>
   <div
     v-on="$listeners"
-    class="bg-green-600 text-white text-center text-sm p-3 rounded-lg shadow cursor-pointer hover:bg-green-700 transition duration-100"
+    class="bg-green-600 text-white text-center text-sm p-3 rounded-lg shadow cursor-pointer hover:bg-green-700 transition duration-100 flex items-center justify-center"
   >
     <slot></slot>
   </div>

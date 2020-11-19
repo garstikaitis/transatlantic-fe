@@ -72,9 +72,7 @@ export default class BaseTopNavigation extends Vue {
   getOrganizationById!: (input: { organizationId: number }) => void;
 
   showTooltip: boolean = false;
-  get selectedOrganization(): Organization | null {
-    return this.organizationState.organization;
-  }
+
   handleSelectedOrganization(organization: Organization) {
     this.getOrganizationById({ organizationId: organization.id });
   }

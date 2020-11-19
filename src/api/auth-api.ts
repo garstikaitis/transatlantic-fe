@@ -18,7 +18,11 @@ export default class AuthApi {
     return data;
   }
   async logout(): Promise<LogoutResponse> {
-    const { data } = await axios.post("/auth/me");
+    const { data } = await axios.post("/auth/logout");
+    return data;
+  }
+  async refreshToken(): Promise<AuthenticateResponse> {
+    const { data } = await axios.post("/auth/refresh");
     return data;
   }
 }
