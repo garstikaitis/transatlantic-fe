@@ -106,6 +106,7 @@ export default class ProjectDetails extends Vue {
         this.projectToSave!.id,
         this.organizationState.activeOrganization!.id
       );
+      // @ts-ignore
       this.apiKey = data.key;
     }, 500);
   }

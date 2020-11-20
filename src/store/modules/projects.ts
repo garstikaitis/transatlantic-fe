@@ -34,6 +34,7 @@ export const mutations: MutationTree<ProjectsState> = {
 
 export const actions: ActionTree<ProjectsState, RootState> = {
   async createProject({ commit, dispatch }, { name, subdomain }) {
+    // @ts-ignore
     const data = await new ProjectsApi().createProject();
     if (data.success) {
       commit("SET_ACTIVE_PROJECT", data.data);

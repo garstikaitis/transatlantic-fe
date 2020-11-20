@@ -8,6 +8,7 @@ const namespaced: boolean = true;
 
 export const rootState: TranslationsState = {
   activeTranslation: null,
+  // @ts-ignore
   translations: [],
   isLoading: false,
   isSuccess: false,
@@ -19,6 +20,7 @@ export const mutations: MutationTree<TranslationsState> = {
     state.activeTranslation = payload;
   },
   SET_TRANSLATIONS(state: TranslationsState, payload: Translation[]) {
+    // @ts-ignore
     state.translations = payload;
   },
   SET_IS_LOADING(state: TranslationsState, payload: boolean) {
