@@ -4,20 +4,36 @@ import {
   DeleteProjectResponse,
   FetchProjectResponse,
   GetProjectsResponse,
+  UpdateProjectResposne,
 } from "@/types/responses";
 import axios from "axios";
 import { CreateProjectRequest } from "@/types/requests";
 
 export default class ProjectsApi {
   async getProjects(organizationId: number): Promise<GetProjectsResponse> {
-    const { data } = await axios.post("/projects", { organizationId });
+    const { data } = await axios.post("/projects", {
+      organizationId,
+    });
     return data;
   }
 
   async createProject(
     input: CreateProjectRequest
   ): Promise<CreateProjectResponse> {
-    const { data } = await axios.post("/projects/create", { ...input });
+    const { data } = await axios.post("/projects/create", {
+      ...input,
+    });
+    return data;
+  }
+
+  async updateProject(
+    projectId: number,
+    name: string
+  ): Promise<UpdateProjectResposne> {
+    const { data } = await axios.post("/projects/update", {
+      projectId,
+      name,
+    });
     return data;
   }
 
@@ -27,7 +43,9 @@ export default class ProjectsApi {
   }
 
   async deleteProject(projectId: number): Promise<DeleteProjectResponse> {
-    const { data } = await axios.post("/projects/delete", { projectId });
+    const { data } = await axios.post("/projects/delete", {
+      projectId,
+    });
     return data;
   }
 }

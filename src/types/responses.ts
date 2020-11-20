@@ -67,3 +67,11 @@ export interface DeleteProjectResponse extends BaseResponse {
 export interface FetchProjectResponse extends BaseResponse {
   data: Project;
 }
+
+export interface GetFetchApiKeyForProjectResponse extends BaseResponse {
+  data: string;
+}
+
+export interface UpdateProjectResposne extends BaseResponse {
+  data: Project;
+}

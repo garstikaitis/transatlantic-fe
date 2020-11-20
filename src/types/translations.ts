@@ -4,10 +4,6 @@ import { Organization } from "./organizations";
 import { Project } from "./projects";
 import { User } from "./user";
 
-export interface TranslationGroup {
-  [key: string]: Translation[];
-}
-
 export interface Translation extends EloquentModel {
   transKey: string;
   transValue: string;
@@ -21,10 +17,14 @@ export interface Translation extends EloquentModel {
   project: Project;
 }
 
+export interface TranslationGroup {
+  [key: string]: Translation[];
+}
+
 export interface TranslationsState {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
   activeTranslation: Translation | null;
-  translations: Translation[];
+  translations: TranslationGroup;
 }

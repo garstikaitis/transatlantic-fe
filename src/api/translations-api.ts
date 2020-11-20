@@ -1,6 +1,9 @@
 import "@/utils/axios";
 import axios from "axios";
-import { CreateTranslationRequest } from "@/types/requests";
+import {
+  CreateTranslationRequest,
+  UpdateTranslationRequest,
+} from "@/types/requests";
 import {
   GetTranslationsResponse,
   CreateTranslationResponse,
@@ -20,7 +23,7 @@ export default class ProjectsApi {
   }
 
   async updateTranslation(
-    input: CreateTranslationRequest
+    input: UpdateTranslationRequest
   ): Promise<CreateTranslationResponse> {
     const { data } = await axios.post("/translations/update", { ...input });
     return data;

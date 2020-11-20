@@ -31,7 +31,7 @@ export default class NewTranslation extends Vue {
   @State("auth") authState!: AuthState;
 
   @Action("createTranslation", { namespace: "translations" })
-  createTranslation!: (input: CreateTranslationRequest) => void;
+  createTranslation!: (input: CreateTranslationRequest) => Promise<boolean>;
 
   get mainLocaleId(): number {
     const mainLocale = this.projectsState.activeProject!.locales.find(
@@ -41,7 +41,7 @@ export default class NewTranslation extends Vue {
   }
 
   async handleCreateTranslation() {
-    this.createTranslation({
+    const success = this.createTranslation({
       transKey: this.transKey,
       transValue: this.transValue,
       localeId: this.mainLocaleId,
@@ -49,6 +49,12 @@ export default class NewTranslation extends Vue {
       userId: this.authState.user!.id,
       projectId: this.projectsState.activeProject!.id,
     });
+    if (success) {
+      router.push({
+        name: "Project",
+        params: { id: this.projectsState.activeProject!.id.toString() },
+      });
+    }
   }
 }
 </script>

@@ -5,6 +5,7 @@ import Dashboard from "@/views/Dashboard.vue";
 import Onboarding from "@/views/Onboarding.vue";
 import Projects from "@/views/Projects.vue";
 import Project from "@/views/Project.vue";
+import ProjectDetails from "@/views/ProjectDetails.vue";
 import NewProject from "@/views/NewProject.vue";
 import NewTranslation from "@/views/NewTranslation.vue";
 
@@ -53,6 +54,14 @@ const routes: Array<RouteConfig> = [
     path: "/projects/:id",
     name: "Project",
     component: Project,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/projects/:id/details",
+    name: "ProjectDetails",
+    component: ProjectDetails,
     meta: {
       requiresAuth: true,
     },

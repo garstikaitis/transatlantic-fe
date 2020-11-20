@@ -13,10 +13,19 @@
     </div>
     <div class="bg-gray-100 min-h-screen pt-20 pl-20 pr-5" v-else>
       <div class="w-full justify-between flex items-center mb-5 mt-4">
-        <slot v-if="!!$slots.title" name="title"></slot>
-        <h1 class="font-bold text-gray-800 text-2xl font-body" v-else>
-          {{ title }}
-        </h1>
+        <div class="flex items-center">
+          <eva-icon
+            v-if="showBack"
+            class="mr-2 cursor-pointer"
+            fill="#6ABAB1"
+            name="arrow-back-outline"
+            @click="$router.back()"
+          />
+          <slot v-if="!!$slots.title" name="title"></slot>
+          <h1 class="font-bold text-gray-800 text-2xl font-body" v-else>
+            {{ title }}
+          </h1>
+        </div>
         <slot name="top-button"></slot>
       </div>
       <slot name="content-not-found"></slot>
@@ -34,6 +43,7 @@ import { State } from "vuex-class";
 @Component({ name: "base-page" })
 export default class BasePage extends Vue {
   @Prop() title!: string;
+  @Prop({ default: true }) showBack!: boolean;
   @State("organizations") organizations!: OrganizationState;
   @State("projects") projects!: ProjectsState;
 }

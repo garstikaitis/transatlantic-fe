@@ -3,6 +3,7 @@ import { Translation, TranslationsState } from "@/types/translations";
 import { Module, MutationTree, ActionTree } from "vuex";
 import TranslationsApi from "@/api/translations-api";
 import router from "@/router";
+import { UpdateTranslationRequest } from "@/types/requests";
 const namespaced: boolean = true;
 
 export const rootState: TranslationsState = {
@@ -36,6 +37,7 @@ export const actions: ActionTree<TranslationsState, RootState> = {
     { commit, dispatch, state },
     { transKey, transValue, localeId, organizationId, userId, projectId }
   ) {
+    commit("SET_IS_LOADING", true);
     const data = await new TranslationsApi().createTranslation({
       transKey,
       transValue,
@@ -45,21 +47,25 @@ export const actions: ActionTree<TranslationsState, RootState> = {
       projectId,
     });
     if (data.success) {
-      const translations = state.translations;
-      [translations].unshift(data.data);
-      commit("SET_TRANSLATIONS", translations);
-      router.push({ name: "Project", params: { id: projectId } });
+      dispatch("getTranslations", projectId);
     }
+    commit("SET_IS_LOADING", false);
   },
   async getTranslations({ commit }, projectId) {
-    const data = await new TranslationsApi().getTranslations(projectId);
-    if (data.success) {
-      commit("SET_TRANSLATIONS", data.data);
-    }
+    return new Promise(async (resolve, reject) => {
+      commit("SET_IS_LOADING", true);
+      const data = await new TranslationsApi().getTranslations(projectId);
+      if (data.success) {
+        commit("SET_TRANSLATIONS", data.data);
+        resolve(true);
+      }
+      commit("SET_IS_LOADING", false);
+      resolve(false);
+    });
   },
 
   async updateTranslation(
-    { commit },
+    { dispatch },
     {
       transKey,
       transValue,
@@ -68,7 +74,7 @@ export const actions: ActionTree<TranslationsState, RootState> = {
       userId,
       projectId,
       translationId,
-    }
+    }: UpdateTranslationRequest
   ) {
     const data = await new TranslationsApi().updateTranslation({
       translationId,
@@ -80,7 +86,7 @@ export const actions: ActionTree<TranslationsState, RootState> = {
       projectId,
     });
     if (data.success) {
-      commit("SET_TRANSLATIONS", data.data);
+      dispatch("getTranslations", projectId);
     }
   },
 };

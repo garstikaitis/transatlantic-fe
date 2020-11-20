@@ -1,9 +1,9 @@
 <template>
-  <div class="mb-8 bg-white p-4">
-    <div class="text-green-600 font-semibold mb-2">{{ translationKey }}</div>
+  <div class="mb-8 bg-white p-4 shadow rounded-lg">
+    <div class="text-green-600 font-semibold mb-4">{{ translationKey }}</div>
     <div class="flex flex-col">
       <div
-        class="flex"
+        class="flex mb-2"
         v-for="(locale, key) in translationsMerged"
         :key="locale.id"
       >
@@ -42,7 +42,11 @@ import { IRenderTranslation } from "@/types/common";
 import { directive as onClickaway } from "vue-clickaway";
 import { OrganizationState } from "@/types/organizations";
 import { AuthState } from "@/types/auth";
-import { UpdateTranslationRequest } from "@/types/requests";
+import {
+  CreateTranslationRequest,
+  UpdateTranslationRequest,
+} from "@/types/requests";
+import { update } from "lodash";
 
 @Component({
   name: "base-translation-card",
@@ -56,8 +60,11 @@ export default class BaseTranslationCard extends Vue {
   @State("organizations") organizationsState!: OrganizationState;
   @State("auth") authState!: AuthState;
 
-  @Action("updateTranslation", { namespace: "translation" })
+  @Action("updateTranslation", { namespace: "translations" })
   updateTranslation!: (input: UpdateTranslationRequest) => void;
+
+  @Action("createTranslation", { namespace: "translations" })
+  createTranslation!: (input: CreateTranslationRequest) => void;
 
   keyToEdit: string | null = null;
   translationValueBeforeEdit: string = "";
@@ -78,8 +85,8 @@ export default class BaseTranslationCard extends Vue {
     ].find(
       (translation) =>
         translation.transValue === this.translationValueBeforeEdit
-    );
-    const input = {
+    )!;
+    let input: UpdateTranslationRequest = {
       transKey: this.translationKey,
       transValue: this.translationValueAfterEdit,
       localeId: localeId,
@@ -87,7 +94,12 @@ export default class BaseTranslationCard extends Vue {
       userId: this.authState.user!.id,
       projectId: this.projectsState.activeProject!.id,
     };
-    this.updateTranslation(input);
+    if (translation) {
+      input.translationId = translation.id;
+      this.updateTranslation(input);
+    } else {
+      this.createTranslation(input);
+    }
     this.translationValueBeforeEdit = "";
     this.translationValueAfterEdit = "";
     this.keyToEdit = null;

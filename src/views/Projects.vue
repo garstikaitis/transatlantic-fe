@@ -1,5 +1,5 @@
 <template>
-  <base-page title="Projects">
+  <base-page title="Projects" :show-back="false">
     <template #top-button>
       <base-button @click="navigateToNewProject">Create project</base-button>
     </template>
@@ -22,7 +22,7 @@
     </div>
     <div v-else slot="content" class="flex">
       <base-card
-        v-for="project in projects.projects"
+        v-for="(project, index) in projects.projects"
         class="mr-4 mb-4 w-1/3 cursor-pointer"
         :key="project.id"
       >
@@ -35,12 +35,12 @@
               class="p-2 hover:bg-gray-200 flex items-center justify-center rounded transition duration-100 relative"
             >
               <eva-icon
-                @click="showTooltip = true"
+                @click="showTooltipIndex = index"
                 name="more-vertical-outline"
                 fill="#268D81"
               ></eva-icon>
               <div
-                v-if="showTooltip"
+                v-if="showTooltipIndex === index"
                 class="absolute bg-white border menu-tooltip rounded p-2 shadow w-max-content"
                 v-on-clickaway="hideTooltip"
               >
@@ -49,6 +49,12 @@
                   @click="deleteProject(project.id)"
                 >
                   Delete project
+                </div>
+                <div
+                  class="text-sm hover:text-green-600"
+                  @click="navigateToProjectDetails(project.id)"
+                >
+                  Show details
                 </div>
               </div>
             </div>
@@ -78,7 +84,7 @@ import { Action, Mutation, State } from "vuex-class";
 import { directive as onClickaway } from "vue-clickaway";
 @Component({ name: "projects", directives: { onClickaway } })
 export default class Projects extends Vue {
-  showTooltip: boolean = false;
+  showTooltipIndex: number | null = null;
   @State("organizations") organizations!: OrganizationState;
   @State("projects") projects!: ProjectsState;
 
@@ -96,8 +102,12 @@ export default class Projects extends Vue {
     router.push({ name: "Project", params: { id: id.toString() } });
   }
 
+  navigateToProjectDetails(id: number) {
+    router.push({ name: "ProjectDetails", params: { id: id.toString() } });
+  }
+
   hideTooltip() {
-    this.showTooltip = false;
+    this.showTooltipIndex = null;
   }
 
   mounted() {

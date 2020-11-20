@@ -31,7 +31,7 @@ export interface CreateTranslationRequest {
 }
 
 export interface UpdateTranslationRequest {
-  translationId: number;
+  translationId?: number;
   transKey: string;
   transValue: string;
   localeId: number;
