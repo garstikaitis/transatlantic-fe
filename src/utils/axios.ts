@@ -2,7 +2,7 @@ import router from "@/router";
 import store from "@/store";
 import axios from "axios";
 
-axios.defaults.baseURL = "https://transatlantic.test/api/";
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 const token = store.state.auth?.token;
 if (token) {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
