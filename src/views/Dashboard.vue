@@ -8,11 +8,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import ClientApi from "@/api/client-api";
 @Component({ name: "dashboard" })
 export default class Dashboard extends Vue {
-  async mounted() {
-    const data = await new ClientApi().getAllLocales();
-  }
+  async mounted() {}
 }
 </script>
