@@ -75,3 +75,7 @@ export interface GetFetchApiKeyForProjectResponse extends BaseResponse {
 export interface UpdateProjectResposne extends BaseResponse {
   data: Project;
 }
+
+export interface UploadTranslationsFromFileResponse {
+  data: Translation[];
+}

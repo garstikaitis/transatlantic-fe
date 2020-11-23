@@ -35,6 +35,21 @@ export const mutations: MutationTree<TranslationsState> = {
 };
 
 export const actions: ActionTree<TranslationsState, RootState> = {
+  async uploadTranslationsFromFile({ commit, state, rootState }, file) {
+    commit("SET_IS_LOADING", true);
+    const {
+      success,
+      data,
+    } = await new TranslationsApi().uploadTranslationsFromFile({
+      file,
+      projectId: rootState.projects.activeProject!.id,
+      organizationId: rootState.organizations.activeOrganization!.id,
+    });
+    if (success) {
+      commit("SET_TRANSLATIONS", data);
+    }
+    commit("SET_IS_LOADING", false);
+  },
   async createTranslation(
     { commit, dispatch, state },
     { transKey, transValue, localeId, organizationId, userId, projectId }

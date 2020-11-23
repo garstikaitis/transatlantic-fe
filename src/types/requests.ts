@@ -39,3 +39,9 @@ export interface UpdateTranslationRequest {
   userId: number;
   projectId: number;
 }
+
+export interface UploadTranslationsFromFileRequest {
+  file: File;
+  projectId: string;
+  organizationId: string;
+}

@@ -1,10 +1,21 @@
 <template>
   <base-page title="Translations">
-    <template #top-button>
+    <div class="flex items-center" slot="top-button">
+      <input
+        @change="handleFileChange"
+        type="file"
+        hidden
+        id="actual-btn"
+        accept="application/json"
+      />
+      <label class="upload-label mr-4" for="actual-btn">
+        <eva-icon name="file-add-outline" fill="white" />
+        Upload from file
+      </label>
       <base-button @click="navigateToCreateTranslation">
         <eva-icon name="plus" fill="white" /> Create new</base-button
       >
-    </template>
+    </div>
     <template #content>
       <base-translation-card
         v-for="(translationGroup, key) in translationsState.translations"
@@ -32,8 +43,16 @@ export default class Proejct extends Vue {
   @Action("getTranslations", { namespace: "translations" })
   getTranslations!: (projectId: number) => void;
 
+  @Action("uploadTranslationsFromFile", { namespace: "translations" })
+  uploadTranslationsFromFile!: (file: File) => void;
+
   navigateToCreateTranslation() {
     router.push({ name: "NewTranslation" });
+  }
+
+  handleFileChange(event: InputEvent) {
+    // @ts-ignore
+    this.uploadTranslationsFromFile(event!.target!.files![0]);
   }
 
   async mounted() {
@@ -45,3 +64,9 @@ export default class Proejct extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.upload-label {
+  @apply .bg-green-600 .text-white .text-center .text-sm .p-3 .rounded-lg .shadow .cursor-pointer  .transition .duration-100 .flex .items-center .justify-center;
+}
+</style>
