@@ -38,12 +38,12 @@ export const actions: ActionTree<TranslationsState, RootState> = {
   async uploadTranslationsFromFile({ commit, state, rootState }, file) {
     commit("SET_IS_LOADING", true);
     const {
-      success,
       data,
+      success,
     } = await new TranslationsApi().uploadTranslationsFromFile({
       file,
-      projectId: rootState.projects.activeProject!.id,
-      organizationId: rootState.organizations.activeOrganization!.id,
+      projectId: rootState.projects.activeProject!.id.toString(),
+      organizationId: rootState.organizations.activeOrganization!.id.toString(),
     });
     if (success) {
       commit("SET_TRANSLATIONS", data);

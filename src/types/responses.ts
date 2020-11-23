@@ -76,6 +76,6 @@ export interface UpdateProjectResposne extends BaseResponse {
   data: Project;
 }
 
-export interface UploadTranslationsFromFileResponse {
+export interface UploadTranslationsFromFileResponse extends BaseResponse {
   data: Translation[];
 }
