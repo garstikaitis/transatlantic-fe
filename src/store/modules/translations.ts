@@ -68,10 +68,13 @@ export const actions: ActionTree<TranslationsState, RootState> = {
     }
     commit("SET_IS_LOADING", false);
   },
-  async getTranslations({ commit }, projectId) {
+  async getTranslations({ commit }, { projectId, searchValue }) {
     return new Promise(async (resolve, reject) => {
       commit("SET_IS_LOADING", true);
-      const data = await new TranslationsApi().getTranslations(projectId);
+      const data = await new TranslationsApi().getTranslations(
+        projectId,
+        searchValue
+      );
       if (data.success) {
         commit("SET_TRANSLATIONS", data.data);
         resolve(true);

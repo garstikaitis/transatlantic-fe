@@ -12,9 +12,13 @@ import {
 } from "@/types/responses";
 
 export default class ProjectsApi {
-  async getTranslations(projectId: number): Promise<GetTranslationsResponse> {
+  async getTranslations(
+    projectId: number,
+    searchValue?: string
+  ): Promise<GetTranslationsResponse> {
     const { data } = await axios.post("/translations", {
       projectId,
+      searchValue,
     });
     return data;
   }

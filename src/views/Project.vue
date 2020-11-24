@@ -1,6 +1,7 @@
 <template>
   <base-page title="Translations">
     <div class="flex items-center" slot="top-button">
+      <button @click="scrollIntoView">scrollIntoView</button>
       <input
         @change="handleFileChange"
         type="file"
@@ -18,6 +19,7 @@
     </div>
     <template #content>
       <base-translation-card
+        :id="key"
         v-for="(translationGroup, key) in translationsState.translations"
         :key="generateKey(key)"
         :translation-group="translationGroup"
@@ -41,7 +43,10 @@ export default class Proejct extends Vue {
   fetchProject!: (projectId: number) => void;
 
   @Action("getTranslations", { namespace: "translations" })
-  getTranslations!: (projectId: number) => void;
+  getTranslations!: (input: {
+    projectId: number;
+    searchValue?: string;
+  }) => void;
 
   @Action("uploadTranslationsFromFile", { namespace: "translations" })
   uploadTranslationsFromFile!: (file: File) => void;
@@ -50,14 +55,24 @@ export default class Proejct extends Vue {
     router.push({ name: "NewTranslation" });
   }
 
+  scrollIntoView() {
+    const element = document.getElementById("hello");
+    element?.scrollIntoView();
+  }
+
   handleFileChange(event: InputEvent) {
     // @ts-ignore
     this.uploadTranslationsFromFile(event!.target!.files![0]);
   }
 
   async mounted() {
+    const searchValue = this.$route.query.searchValue;
     this.fetchProject(Number(this.$route.params.id));
-    this.getTranslations(Number(this.$route.params.id));
+    this.getTranslations({
+      projectId: Number(this.$route.params.id),
+      // @ts-ignore
+      searchValue,
+    });
   }
   generateKey(key: string) {
     return key.split(".").join("");
