@@ -4,8 +4,35 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import "@/utils/register-components";
+import { IframeEvent } from "./types/common";
 
 Vue.config.productionTip = false;
+
+window.addEventListener("message", async (event: MessageEvent) => {
+  // IMPORTANT: check the origin of the data!
+  if (event.origin.startsWith("http://localhost:8081")) {
+    // The data was sent from your site.
+    // Data sent with postMessage is stored in event.data:
+    const success = await store.dispatch(
+      "translations/getTranslations",
+      {
+        projectId: store.state.projects.activeProject!.id,
+        searchValue: event.data,
+      },
+      { root: true }
+    );
+    if (success) {
+      if (router.currentRoute.name !== "Project") {
+        router.push({ name: "Project" });
+      }
+    }
+  } else {
+    // The data was NOT sent from your site!
+    // Be careful! Do not use it. This else branch is
+    // here just for clarity, you usually shouldn't need it.
+    return;
+  }
+});
 
 new Vue({
   router,

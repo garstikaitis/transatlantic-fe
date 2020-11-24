@@ -24,3 +24,7 @@ export interface IRenderTranslation extends Record<string, any> {
     isMainLocale: boolean;
   };
 }
+
+export interface IframeEvent {
+  text: string;
+}
