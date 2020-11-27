@@ -8,11 +8,9 @@ import { IframeEvent } from "./types/common";
 
 Vue.config.productionTip = false;
 
-window.addEventListener("message", async (event: MessageEvent) => {
+window.onmessage = async (event: MessageEvent) => {
   // IMPORTANT: check the origin of the data!
-  if (event.origin.startsWith("http://localhost:8081")) {
-    // The data was sent from your site.
-    // Data sent with postMessage is stored in event.data:
+  if (event.origin.startsWith("http://localhost:8080")) {
     const success = await store.dispatch(
       "translations/getTranslations",
       {
@@ -32,7 +30,7 @@ window.addEventListener("message", async (event: MessageEvent) => {
     // here just for clarity, you usually shouldn't need it.
     return;
   }
-});
+};
 
 new Vue({
   router,

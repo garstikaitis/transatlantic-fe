@@ -95,7 +95,6 @@ export default class Onboarding extends Vue {
     }
   }
   async handleCreateOrganization() {
-    console.log(this.companyName, this.subdomain);
     const data = await this.createOrganization({
       name: this.companyName,
       subdomain: this.subdomain,
