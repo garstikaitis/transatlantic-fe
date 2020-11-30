@@ -8,6 +8,7 @@ import Project from "@/views/Project.vue";
 import ProjectDetails from "@/views/ProjectDetails.vue";
 import NewProject from "@/views/NewProject.vue";
 import NewTranslation from "@/views/NewTranslation.vue";
+import SelectOrganization from "@/views/SelectOrganization.vue";
 
 const routes: Array<RouteConfig> = [
   {
@@ -32,6 +33,7 @@ const routes: Array<RouteConfig> = [
     component: Dashboard,
     meta: {
       requiresAuth: true,
+      requiresOrganization: true,
     },
   },
   {
@@ -40,6 +42,7 @@ const routes: Array<RouteConfig> = [
     component: Onboarding,
     meta: {
       requiresAuth: true,
+      requiresOrganization: false,
     },
   },
   {
@@ -48,6 +51,16 @@ const routes: Array<RouteConfig> = [
     component: Projects,
     meta: {
       requiresAuth: true,
+      requiresOrganization: true,
+    },
+  },
+  {
+    path: "/select-organization",
+    name: "SelectOrganization",
+    component: SelectOrganization,
+    meta: {
+      requiresAuth: true,
+      requiresOrganization: false,
     },
   },
   {
@@ -56,6 +69,7 @@ const routes: Array<RouteConfig> = [
     component: Project,
     meta: {
       requiresAuth: true,
+      requiresOrganization: true,
     },
   },
   {
@@ -64,6 +78,7 @@ const routes: Array<RouteConfig> = [
     component: ProjectDetails,
     meta: {
       requiresAuth: true,
+      requiresOrganization: true,
     },
   },
   {
@@ -72,6 +87,7 @@ const routes: Array<RouteConfig> = [
     component: NewTranslation,
     meta: {
       requiresAuth: true,
+      requiresOrganization: true,
     },
   },
   {
@@ -80,6 +96,7 @@ const routes: Array<RouteConfig> = [
     component: NewProject,
     meta: {
       requiresAuth: true,
+      requiresOrganization: true,
     },
   },
 ];

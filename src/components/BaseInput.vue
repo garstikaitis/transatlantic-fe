@@ -1,12 +1,23 @@
 <template>
   <div class="flex flex-col">
-    <label class="text-sm mb-1" v-if="label">{{ label }}</label>
-    <input
-      @input="$emit('input', $event.target.value)"
-      :type="type"
-      :value="value"
-      class="base-input focus:outline-none border px-2 py-3 shadow rounded-lg focus:border-green-400"
-    />
+    <label
+      v-if="label"
+      :for="name"
+      class="block text-sm font-medium text-gray-700"
+    >
+      {{ label }}
+    </label>
+    <div class="mt-1">
+      <input
+        :id="name"
+        :name="name"
+        :type="type"
+        :required="required"
+        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        @input="$emit('input', $event.target.value)"
+        :value="value"
+      />
+    </div>
   </div>
 </template>
 
@@ -16,7 +27,9 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 @Component({ name: "base-input" })
 export default class BaseInput extends Vue {
   @Prop({ default: "" }) value!: string | number | null;
+  @Prop({ default: "" }) name!: string | number | null;
   @Prop({ default: "" }) label!: string | number | null;
+  @Prop({ default: false }) required!: boolean;
   @Prop({ default: "text" }) type!: string;
 }
 </script>

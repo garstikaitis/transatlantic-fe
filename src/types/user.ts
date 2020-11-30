@@ -6,5 +6,6 @@ export interface User {
   lastName: string;
   email: string;
   onboardingCompleted: boolean;
+  image?: string;
   organizations: Organization[];
 }

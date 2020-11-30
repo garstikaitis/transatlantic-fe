@@ -5,7 +5,7 @@
     </div>
     <div class="card absolute bg-white flex shadow rounded-lg p-8">
       <div class="w-1/2 mr-8">
-        <div class="font-semibold text-3xl text-green-600">
+        <div class="font-semibold text-3xl text-indigo-600">
           Thank you for signing up
         </div>
         <p class="text-gray-600">

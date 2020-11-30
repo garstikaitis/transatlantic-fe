@@ -61,7 +61,7 @@
           </div>
           <div class="flex" @click="navigateToProject(project.id)">
             <div
-              class="bg-green-600 text-white text-sm w-max-content p-2 rounded-lg mr-2"
+              class="bg-indigo-500 text-white text-sm w-max-content p-2 rounded-lg mr-2"
               v-for="locale in project.locales"
               :key="locale.id"
             >

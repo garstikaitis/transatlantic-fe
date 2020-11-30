@@ -79,3 +79,9 @@ export interface UpdateProjectResposne extends BaseResponse {
 export interface UploadTranslationsFromFileResponse extends BaseResponse {
   data: Translation[];
 }
+
+export interface GetDashboardTotalsResponse extends BaseResponse {
+  data: {
+    total_translations: number;
+  };
+}

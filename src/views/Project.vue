@@ -1,7 +1,6 @@
 <template>
   <base-page title="Translations">
     <div class="flex items-center" slot="top-button">
-      <button @click="scrollIntoView">scrollIntoView</button>
       <input
         @change="handleFileChange"
         type="file"
@@ -55,11 +54,6 @@ export default class Proejct extends Vue {
     router.push({ name: "NewTranslation" });
   }
 
-  scrollIntoView() {
-    const element = document.getElementById("hello");
-    element?.scrollIntoView();
-  }
-
   handleFileChange(event: InputEvent) {
     // @ts-ignore
     this.uploadTranslationsFromFile(event!.target!.files![0]);
@@ -82,6 +76,6 @@ export default class Proejct extends Vue {
 
 <style lang="scss" scoped>
 .upload-label {
-  @apply .bg-green-600 .text-white .text-center .text-sm .p-3 .rounded-lg .shadow .cursor-pointer  .transition .duration-100 .flex .items-center .justify-center;
+  @apply .flex .justify-center .py-2 .px-4 .border .border-transparent .rounded-md .shadow-sm .text-sm .font-medium .text-white .bg-indigo-600 .cursor-pointer;
 }
 </style>

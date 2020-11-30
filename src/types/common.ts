@@ -28,3 +28,8 @@ export interface IRenderTranslation extends Record<string, any> {
 export interface IframeEvent {
   text: string;
 }
+
+export interface Link {
+  name: string;
+  displayName: string;
+}

@@ -2,16 +2,7 @@
   <div>
     <base-top-navigation />
     <base-side-navigation />
-    <div
-      class="bg-gray-100 min-h-screen pt-20 pl-20 pr-5 flex items-center justify-center"
-      v-if="organizations.isLoading"
-    >
-      <ellipsis-loader
-        :loading="organizations.isLoading || projects.isLoading"
-        color="#268D81"
-      />
-    </div>
-    <div class="bg-gray-100 min-h-screen pt-20 pl-20 pr-5" v-else>
+    <div class="bg-gray-100 min-h-screen pt-20 pl-20 pr-5">
       <div class="w-full justify-between flex items-center mb-5 mt-4">
         <div class="flex items-center">
           <eva-icon
@@ -21,8 +12,12 @@
             name="arrow-back-outline"
             @click="$router.back()"
           />
-          <slot v-if="!!$slots.title" name="title"></slot>
-          <h1 class="font-bold text-gray-800 text-2xl font-body" v-else>
+          <slot
+            v-if="!!$slots.title"
+            class="text-3xl font-extrabold tracking-tight sm:text-4xl"
+            name="title"
+          ></slot>
+          <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl" v-else>
             {{ title }}
           </h1>
         </div>

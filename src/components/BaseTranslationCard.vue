@@ -1,6 +1,8 @@
 <template>
   <div class="mb-8 bg-white p-4 shadow rounded-lg">
-    <div class="text-green-600 font-semibold mb-4">{{ translationKey }}</div>
+    <div class="text-indigo-500 font-semibold mb-4">
+      {{ translationKey.toUpperCase() }}
+    </div>
     <div class="flex flex-col">
       <div
         class="flex mb-2"

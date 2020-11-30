@@ -4,10 +4,11 @@ module.exports = {
     purgeLayersByDefault: true,
   },
   purge: [],
+  plugins: [require("@tailwindcss/forms")],
   theme: {
     extend: {
       fontFamily: {
-        display: ["Mukta", "sans-serif"],
+        display: ["Inter var"],
       },
       colors: {
         "green-dark": {
@@ -74,5 +75,4 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [],
 };

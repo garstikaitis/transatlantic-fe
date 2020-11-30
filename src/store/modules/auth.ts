@@ -21,6 +21,13 @@ export const getters: GetterTree<AuthState, RootState> = {
   userOrganizations(state): Organization[] | undefined {
     return state?.user?.organizations;
   },
+  userImage(state): string {
+    return state?.user?.image
+      ? state?.user?.image
+      : `https://robohash.org/${Math.random()
+          .toString(36)
+          .replace(/[^a-z]+/g, "")}`;
+  },
 };
 
 export const mutations: MutationTree<AuthState> = {

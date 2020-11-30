@@ -15,10 +15,15 @@ router.beforeEach((routeTo, routeFrom, next) => {
   const requiresAuth = routeTo.matched.length
     ? routeTo.matched[0].meta.requiresAuth
     : false;
+  const requiresOrganization = routeTo.matched.length
+    ? routeTo.matched[0].meta.requiresOrganization
+    : false;
   const isAuthenticated = store.getters["auth/isAuthenticated"];
-  const user = store.state.auth.user;
+  const activeOrganization = store.state.organizations.activeOrganization;
   if (!isAuthenticated && requiresAuth) {
     next({ name: "Login" });
+  } else if (isAuthenticated && requiresOrganization && !activeOrganization) {
+    next({ name: "SelectOrganization" });
   } else if (isAuthenticated && !requiresAuth) {
     next({ name: "Dashboard" });
   } else {

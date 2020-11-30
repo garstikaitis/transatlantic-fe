@@ -1,7 +1,7 @@
 <template>
   <div
     v-on="$listeners"
-    class="bg-green-600 text-white text-center text-sm p-3 rounded-lg shadow cursor-pointer hover:bg-green-700 transition duration-100 flex items-center justify-center"
+    class=" flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
   >
     <slot></slot>
   </div>

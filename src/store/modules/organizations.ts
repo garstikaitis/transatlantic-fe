@@ -57,9 +57,9 @@ export const actions: ActionTree<OrganizationState, RootState> = {
       commit("SET_IS_LOADING", false);
       commit("SET_IS_SUCCESS", true);
       commit("SET_ORGANIZATIONS", data.data);
-      if (data.data.length === 1) {
-        commit("SET_ACTIVE_ORGANIZATION", data.data[0]);
-      }
+      // if (data.data.length === 1) {
+      //   commit("SET_ACTIVE_ORGANIZATION", data.data[0]);
+      // }
     } else {
       commit("SET_IS_LOADING", false);
       commit("SET_IS_ERROR", true);

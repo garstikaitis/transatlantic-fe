@@ -35,6 +35,22 @@
         ></eva-icon>
       </div>
     </router-link>
+    <router-link :to="{ name: 'SelectOrganization' }">
+      <div class="mb-6 relative">
+        <div
+          v-if="$route.name.includes('Organization')"
+          class="activeIndicator"
+        ></div>
+        <eva-icon
+          class="w-8 h-8"
+          style="width: 40px; height: 30px;"
+          :height="35"
+          :width="35"
+          name="car-outline"
+          :fill="$route.name.includes('Organization') ? '#268D81' : '#6ABAB1'"
+        ></eva-icon>
+      </div>
+    </router-link>
   </div>
 </template>
 

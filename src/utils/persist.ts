@@ -7,7 +7,7 @@ const vuexLocalStorage = new VuexPersist({
   // reducer: state => state,
   // Function that passes a mutation and lets you decide if it should update the state in localStorage.
   // filter: mutation => (true)
-  modules: ["auth"],
+  modules: ["auth", "organizations"],
 });
 
 export default vuexLocalStorage;

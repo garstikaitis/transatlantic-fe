@@ -3,30 +3,23 @@
     class="fixed top-0 bg-white w-screen p-5 flex z-50"
     style="left: 3.7rem;"
   >
-    <div class="w-3/5 flex items-center">
+    <div class="w-4/5 flex items-center">
       <i class="el-icon-search mr-2"></i
       ><input class="search-input" placeholder="Search your projects.." />
     </div>
-    <div class="w-1/5 ml-8">
-      <v-select
-        label="name"
-        @input="handleSelectedOrganization"
-        :options="organizationState.organizations"
-        :value="organizationState.activeOrganization"
-        placeholder="Select organization"
-      ></v-select>
-    </div>
-    <div
-      class="w-1/5 flex justify-center mr-16 cursor-pointer items-center"
-      @click="showTooltip = !showTooltip"
-      v-on-clickaway="hideTooltip"
-    >
-      <div
-        class="bg-blue-500 px-3 py-1 rounded-full text-white font-bold mr-2 relative"
+    <div class="w-1/5 flex mr-16 cursor-pointer items-center justify-end">
+      <base-context-menu
+        :links="topNavigationLinks"
+        @option-selected="handleNavigationOptionSelected"
       >
-        {{ auth.user.firstName ? auth.user.firstName.substr(0) : "X" }}
-      </div>
-      <div
+        <div
+          slot="trigger"
+          class="relative max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <img :src="userImage" class="w-8" />
+        </div>
+      </base-context-menu>
+      <!-- <div
         v-if="showTooltip"
         class="mt-12 absolute rounded-lg bg-white p-3 shadow w-32"
         style="top: 20px;"
@@ -37,7 +30,7 @@
         <hr class="my-4" />
         <div class="hover:text-green-600">Settings</div>
         <div @click="logout" class="hover:text-green-600 mt-2">Logout</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -48,16 +41,16 @@ import { Action, Getter, Mutation, State } from "vuex-class";
 import { mapState, mapActions } from "vuex";
 import { AuthState } from "@/types/auth";
 import { Organization, OrganizationState } from "@/types/organizations";
-// @ts-ignore
-import { directive as onClickaway } from "vue-clickaway";
+import { Link } from "@/types/common";
 // @ts-ignore
 @Component({
   name: "base-top-navigation",
-  directives: { onClickaway: onClickaway },
 })
 export default class BaseTopNavigation extends Vue {
   @State("auth") auth!: AuthState;
   @State("organizations") organizationState!: OrganizationState;
+
+  @Getter("auth/userImage") userImage!: string;
 
   @Mutation("organizations/SET_ACTIVE_ORGANIZATION")
   SET_ACTIVE_ORGANIZATION!: (org: Organization) => void;
@@ -72,6 +65,20 @@ export default class BaseTopNavigation extends Vue {
   getOrganizationById!: (input: { organizationId: number }) => void;
 
   showTooltip: boolean = false;
+  topNavigationLinks: Link[] = [
+    {
+      name: "Profile",
+      displayName: "Profile",
+    },
+    {
+      name: "Logout",
+      displayName: "Logout",
+    },
+  ];
+
+  handleNavigationOptionSelected(option: Link) {
+    console.log(option);
+  }
 
   handleSelectedOrganization(organization: Organization) {
     this.getOrganizationById({ organizationId: organization.id });
