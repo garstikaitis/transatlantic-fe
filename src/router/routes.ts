@@ -9,6 +9,7 @@ import ProjectDetails from "@/views/ProjectDetails.vue";
 import NewProject from "@/views/NewProject.vue";
 import NewTranslation from "@/views/NewTranslation.vue";
 import SelectOrganization from "@/views/SelectOrganization.vue";
+import Payments from "@/views/Payments.vue";
 
 const routes: Array<RouteConfig> = [
   {
@@ -94,6 +95,15 @@ const routes: Array<RouteConfig> = [
     path: "/projects/new",
     name: "NewProject",
     component: NewProject,
+    meta: {
+      requiresAuth: true,
+      requiresOrganization: true,
+    },
+  },
+  {
+    path: "/payments",
+    name: "Payments",
+    component: Payments,
     meta: {
       requiresAuth: true,
       requiresOrganization: true,

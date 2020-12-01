@@ -32,4 +32,5 @@ export interface IframeEvent {
 export interface Link {
   name: string;
   displayName: string;
+  params?: object;
 }

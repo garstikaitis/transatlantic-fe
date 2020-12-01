@@ -1,5 +1,5 @@
 <template>
-  <base-page :show-back="false" title="Select organization">
+  <base-page :show-back="false" title="Your organizations">
     <ellipsis-loader
       slot="content-loading"
       :loading="organizations.isLoading || projects.isLoading"

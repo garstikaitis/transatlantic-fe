@@ -8,7 +8,7 @@
           <eva-icon
             v-if="showBack"
             class="mr-2 cursor-pointer"
-            fill="#6ABAB1"
+            fill="#5a67d8"
             name="arrow-back-outline"
             @click="$router.back()"
           />

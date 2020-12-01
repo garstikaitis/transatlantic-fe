@@ -3,16 +3,6 @@
     <div @click="isActive = !isActive">
       <slot name="trigger"></slot>
     </div>
-    <!--
-              Profile dropdown panel, show/hide based on dropdown state.
-
-              Entering: "transition ease-out duration-100"
-                From: "transform opacity-0 scale-95"
-                To: "transform opacity-100 scale-100"
-              Leaving: "transition ease-in duration-75"
-                From: "transform opacity-100 scale-100"
-                To: "transform opacity-0 scale-95"
-            -->
     <transition
       :appear="true"
       enter-active-class="transition ease-out duration-100 transform"
@@ -24,7 +14,7 @@
     >
       <div
         v-show="isActive"
-        class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
+        class="origin-top-right absolute right-0 w-min-content rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50"
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="user-menu"
@@ -34,7 +24,7 @@
           :key="index"
           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           role="menuitem"
-          :to="{ name: link.name }"
+          :to="{ name: link.name, params: { ...link.params } }"
           @click="$emit('option-selected', link)"
         >
           {{ link.displayName }}

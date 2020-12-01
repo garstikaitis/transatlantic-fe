@@ -32,4 +32,7 @@ body {
 .w-max-content {
   width: max-content;
 }
+.w-min-content {
+  width: min-content;
+}
 </style>

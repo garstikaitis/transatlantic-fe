@@ -15,7 +15,7 @@
           :height="35"
           :width="35"
           name="layers-outline"
-          :fill="$route.name === 'Dashboard' ? '#268D81' : '#6ABAB1'"
+          :fill="$route.name === 'Dashboard' ? '#5a67d8' : '#a3bffa'"
         ></eva-icon>
       </div>
     </router-link>
@@ -31,7 +31,7 @@
           :height="35"
           :width="35"
           name="pantone-outline"
-          :fill="$route.name.includes('Project') ? '#268D81' : '#6ABAB1'"
+          :fill="$route.name.includes('Project') ? '#5a67d8' : '#a3bffa'"
         ></eva-icon>
       </div>
     </router-link>
@@ -47,7 +47,23 @@
           :height="35"
           :width="35"
           name="car-outline"
-          :fill="$route.name.includes('Organization') ? '#268D81' : '#6ABAB1'"
+          :fill="$route.name.includes('Organization') ? '#5a67d8' : '#a3bffa'"
+        ></eva-icon>
+      </div>
+    </router-link>
+    <router-link :to="{ name: 'Payments' }">
+      <div class="mb-6 relative">
+        <div
+          v-if="$route.name.includes('Payment')"
+          class="activeIndicator"
+        ></div>
+        <eva-icon
+          class="w-8 h-8"
+          style="width: 40px; height: 30px;"
+          :height="35"
+          :width="35"
+          name="credit-card-outline"
+          :fill="$route.name.includes('Payment') ? '#5a67d8' : '#a3bffa'"
         ></eva-icon>
       </div>
     </router-link>
@@ -75,6 +91,6 @@ export default class BaseSideNavigation extends Vue {
   right: -12px;
   height: 100%;
   width: 3px;
-  background-color: #268d81;
+  background-color: #5a67d8;
 }
 </style>
