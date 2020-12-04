@@ -1,6 +1,13 @@
 <template>
   <div class="mb-8 bg-white p-4 shadow rounded-lg">
-    <div class="text-indigo-500 font-semibold mb-4">
+    <div class="text-indigo-500 font-semibold mb-4 flex cursor-pointer">
+      <base-checkbox
+        :value="translationKey"
+        v-model="selectedTranslations"
+        @change="handleSelect"
+        class="mr-2"
+        ref="checkbox"
+      />
       {{ translationKey.toUpperCase() }}
     </div>
     <div class="flex flex-col">
@@ -55,6 +62,8 @@ import { update } from "lodash";
   directives: { onClickaway: onClickaway },
 })
 export default class BaseTranslationCard extends Vue {
+  selectedTranslations: [] = [];
+
   @Prop() translationGroup!: Translation[];
   @Prop() translationKey!: string;
   @State("projects") projectsState!: ProjectsState;
@@ -79,6 +88,16 @@ export default class BaseTranslationCard extends Vue {
 
   handleUpdateTranslation(value: string) {
     this.translationValueAfterEdit = value;
+  }
+
+  handleSelect(data: string[]) {
+    if (data.length) {
+      this.$emit("selected", this.translationKey);
+      // this.$refs.checkbox.modelValue = [this.translationKey];
+    } else {
+      this.$emit("unselected", this.translationKey);
+      // this.$refs.checkbox.modelValue = [];
+    }
   }
 
   saveTranslation(localeId: number) {

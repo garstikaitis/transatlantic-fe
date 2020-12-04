@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="p-4 bg-white">
+  <div id="app" class="p-4 bg-white overflow-hidden">
     <router-view />
   </div>
 </template>
@@ -7,7 +7,11 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 @Component({ name: "App" })
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted() {
+    window.postMessage({ name: "loaded", value: true }, "*");
+  }
+}
 </script>
 
 <style lang="scss">
@@ -34,5 +38,11 @@ body {
 }
 .w-min-content {
   width: min-content;
+}
+.pretty {
+  cursor: pointer;
+  input {
+    @apply .border .rounded .cursor-pointer;
+  }
 }
 </style>

@@ -76,9 +76,7 @@ export default class BaseTopNavigation extends Vue {
     },
   ];
 
-  handleNavigationOptionSelected(option: Link) {
-    console.log(option);
-  }
+  handleNavigationOptionSelected(option: Link) {}
 
   handleSelectedOrganization(organization: Organization) {
     this.getOrganizationById({ organizationId: organization.id });

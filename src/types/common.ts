@@ -6,6 +6,11 @@ export interface RootState {
   auth: AuthState;
   organizations: OrganizationState;
   projects: ProjectsState;
+  common: CommonState;
+}
+
+export interface CommonState {
+  showPrompt: boolean;
 }
 
 export interface EloquentModel {

@@ -35,6 +35,21 @@ export const mutations: MutationTree<TranslationsState> = {
 };
 
 export const actions: ActionTree<TranslationsState, RootState> = {
+  async deleteTranslations(
+    { dispatch, commit, rootState },
+    { translationKeys }
+  ) {
+    const projectId = rootState.projects.activeProject!.id.toString();
+    commit("SET_IS_LOADING", true);
+    const { success } = await new TranslationsApi().deleteTranslations(
+      projectId,
+      translationKeys
+    );
+    await dispatch("getTranslations", {
+      projectId: projectId,
+    });
+    commit("SET_IS_LOADING", false);
+  },
   async uploadTranslationsFromFile({ commit, state, rootState }, file) {
     commit("SET_IS_LOADING", true);
     const {

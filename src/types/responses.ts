@@ -80,6 +80,10 @@ export interface UploadTranslationsFromFileResponse extends BaseResponse {
   data: Translation[];
 }
 
+export interface DeleteTranslationsResponse extends BaseResponse {
+  data: null;
+}
+
 export interface GetDashboardTotalsResponse extends BaseResponse {
   data: {
     total_translations: number;

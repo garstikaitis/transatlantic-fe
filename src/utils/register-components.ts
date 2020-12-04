@@ -9,6 +9,8 @@ import vSelect from "vue-select";
 import * as VueSpinnersCss from "vue-spinners-css";
 // @ts-ignore
 import countTo from "vue-count-to";
+// @ts-ignore
+import PrettyCheck from "pretty-checkbox-vue/check";
 
 const requireComponent = require.context(
   // The relative path of the components folder
@@ -46,5 +48,6 @@ requireComponent.keys().forEach((fileName) => {
 
 Vue.component("v-select", vSelect);
 Vue.component("v-count-to", countTo);
+Vue.component("base-checkbox", PrettyCheck);
 Vue.use(EvaIcons);
 Vue.use(VueSpinnersCss);

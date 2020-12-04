@@ -1,5 +1,7 @@
 <template>
-  <div class="fixed top-0 left-0 bg-white flex flex-col p-3 h-screen shadow">
+  <div
+    class="fixed top-0 left-0 bg-white flex flex-col p-3 h-screen shadow z-50"
+  >
     <img
       :src="require('../assets/logo.png')"
       style="width: 40px;"

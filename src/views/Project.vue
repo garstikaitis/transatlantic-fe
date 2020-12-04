@@ -19,11 +19,55 @@
     <template #content>
       <base-translation-card
         :id="key"
+        @selected="handleSelectTranslations"
+        @unselected="handleUnselectTranslations"
         v-for="(translationGroup, key) in translationsState.translations"
         :key="generateKey(key)"
         :translation-group="translationGroup"
         :translation-key="key"
       />
+      <div
+        class="fixed bottom-0 left-0 w-full p-3 bg-indigo-400 flex justify-between"
+        v-if="selectedTranslations.length"
+      >
+        <div class="flex">
+          <base-button
+            @click="selectAllTranslations"
+            class="flex items-center bg-white mr-2 ml-20"
+            ><eva-icon name="checkmark-outline" class="w-8" fill="#fff" />
+            Select all</base-button
+          >
+          <base-button
+            @click="deselectAllTranslations"
+            class="flex items-center bg-white mr-2"
+            ><eva-icon name="folder-remove-outline" class="w-8" fill="#fff" />
+            Deselect all</base-button
+          >
+        </div>
+        <div>
+          <base-button
+            @click="showPrompt = true"
+            class="flex items-center bg-white"
+            ><eva-icon name="trash-2-outline" class="w-8" fill="#fff" />Delete
+            {{ selectedTranslations.length }} translation pairs</base-button
+          >
+        </div>
+      </div>
+      <base-prompt
+        v-if="showPrompt"
+        @cancel="showPrompt = false"
+        @proceed="handleDelete"
+      >
+        <template #header
+          >Delete {{ selectedTranslations.length }} translations</template
+        >
+        <template #content
+          >Are you sure you want to delete these translations? All of the data
+          will be permanently removed from our servers forever. This action
+          cannot be undone.</template
+        >
+        <template #cta>Delete</template>
+      </base-prompt>
     </template>
   </base-page>
 </template>
@@ -34,9 +78,13 @@ import { Translation, TranslationsState } from "@/types/translations";
 import TranslationsApi from "@/api/translations-api";
 import { Action, State } from "vuex-class";
 import router from "@/router";
+import { ProjectsState } from "@/types/projects";
 @Component({ name: "project" })
 export default class Proejct extends Vue {
+  selectedTranslations: string[] = [];
+  showPrompt: boolean = false;
   @State("translations") translationsState!: TranslationsState;
+  @State("projects") projectsState!: ProjectsState;
 
   @Action("fetchProject", { namespace: "projects" })
   fetchProject!: (projectId: number) => void;
@@ -47,11 +95,37 @@ export default class Proejct extends Vue {
     searchValue?: string;
   }) => void;
 
+  @Action("deleteTranslations", { namespace: "translations" })
+  deleteTranslations!: (input: { translationKeys: string[] }) => void;
+
   @Action("uploadTranslationsFromFile", { namespace: "translations" })
   uploadTranslationsFromFile!: (file: File) => void;
 
   navigateToCreateTranslation() {
     router.push({ name: "NewTranslation" });
+  }
+
+  deselectAllTranslations() {}
+
+  selectAllTranslations() {}
+
+  handleSelectTranslations(transKey: string) {
+    this.selectedTranslations.push(transKey);
+  }
+
+  handleUnselectTranslations(transKey: string) {
+    const index = this.selectedTranslations.findIndex(
+      (translation) => translation === transKey
+    );
+    this.selectedTranslations.splice(index, 1);
+  }
+
+  handleDelete() {
+    this.showPrompt = false;
+    this.deleteTranslations({
+      translationKeys: this.selectedTranslations,
+    });
+    this.selectedTranslations = [];
   }
 
   handleFileChange(event: InputEvent) {

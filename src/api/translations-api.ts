@@ -9,9 +9,20 @@ import {
   GetTranslationsResponse,
   CreateTranslationResponse,
   UploadTranslationsFromFileResponse,
+  DeleteTranslationsResponse,
 } from "@/types/responses";
 
 export default class ProjectsApi {
+  async deleteTranslations(
+    projectId: string,
+    translationKeys: string[]
+  ): Promise<DeleteTranslationsResponse> {
+    const { data } = await axios.post("/translations/delete", {
+      projectId,
+      translationKeys,
+    });
+    return data;
+  }
   async getTranslations(
     projectId: number,
     searchValue?: string

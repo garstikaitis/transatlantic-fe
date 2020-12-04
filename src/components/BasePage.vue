@@ -34,12 +34,13 @@
 import { OrganizationState } from "@/types/organizations";
 import { ProjectsState } from "@/types/projects";
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { State } from "vuex-class";
+import { Getter, State } from "vuex-class";
 @Component({ name: "base-page" })
 export default class BasePage extends Vue {
   @Prop() title!: string;
   @Prop({ default: true }) showBack!: boolean;
   @State("organizations") organizations!: OrganizationState;
   @State("projects") projects!: ProjectsState;
+  @Getter("common/showPrompt") showPrompt!: boolean;
 }
 </script>
