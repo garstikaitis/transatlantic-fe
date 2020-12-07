@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 bg-white w-screen p-5 flex z-50"
+    class="fixed top-0 bg-white w-screen p-5 flex z-40"
     style="left: 3.7rem;"
   >
     <div class="w-4/5 flex items-center">
@@ -9,7 +9,7 @@
     </div>
     <div class="w-1/5 flex mr-16 cursor-pointer items-center justify-end">
       <base-context-menu
-        :links="topNavigationLinks"
+        :actions="topNavigationLinks"
         @option-selected="handleNavigationOptionSelected"
       >
         <div
@@ -41,7 +41,7 @@ import { Action, Getter, Mutation, State } from "vuex-class";
 import { mapState, mapActions } from "vuex";
 import { AuthState } from "@/types/auth";
 import { Organization, OrganizationState } from "@/types/organizations";
-import { Link } from "@/types/common";
+import { BaseContextAction } from "@/types/common";
 // @ts-ignore
 @Component({
   name: "base-top-navigation",
@@ -65,18 +65,21 @@ export default class BaseTopNavigation extends Vue {
   getOrganizationById!: (input: { organizationId: number }) => void;
 
   showTooltip: boolean = false;
-  topNavigationLinks: Link[] = [
+  topNavigationLinks: BaseContextAction[] = [
     {
       name: "Profile",
       displayName: "Profile",
+      type: "link",
     },
     {
       name: "Logout",
       displayName: "Logout",
+      type: "method",
+      method: () => this.logout(),
     },
   ];
 
-  handleNavigationOptionSelected(option: Link) {}
+  handleNavigationOptionSelected(option: BaseContextAction) {}
 
   handleSelectedOrganization(organization: Organization) {
     this.getOrganizationById({ organizationId: organization.id });

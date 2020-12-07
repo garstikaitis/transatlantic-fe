@@ -41,9 +41,12 @@
         </div>
         <div class="bg-gray-50 px-5 py-3">
           <div class="text-sm">
-            <a href="#" class="font-medium text-cyan-700 hover:text-cyan-900">
+            <router-link
+              :to="{ name: 'Projects' }"
+              class="font-medium text-cyan-700 hover:text-cyan-900"
+            >
               View all
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
@@ -83,9 +86,12 @@
         </div>
         <div class="bg-gray-50 px-5 py-3">
           <div class="text-sm">
-            <a href="#" class="font-medium text-cyan-700 hover:text-cyan-900">
+            <router-link
+              :to="{ name: 'Payments' }"
+              class="font-medium text-cyan-700 hover:text-cyan-900"
+            >
               View all
-            </a>
+            </router-link>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" v-on-clickaway="hideMenu">
+  <div v-on="$listeners" class="relative" v-on-clickaway="hideMenu">
     <div @click="isActive = !isActive">
       <slot name="trigger"></slot>
     </div>
@@ -19,16 +19,25 @@
         aria-orientation="vertical"
         aria-labelledby="user-menu"
       >
-        <router-link
-          v-for="(link, index) in links"
-          :key="index"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          role="menuitem"
-          :to="{ name: link.name, params: { ...link.params } }"
-          @click="$emit('option-selected', link)"
-        >
-          {{ link.displayName }}
-        </router-link>
+        <div v-for="(action, index) in actions" :key="index">
+          <router-link
+            v-if="action.type === 'link'"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            role="menuitem"
+            :to="{ name: action.name, params: { ...action.params } }"
+            @click="$emit('option-selected', action)"
+          >
+            {{ action.displayName }}
+          </router-link>
+          <div
+            v-else
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            role="menuitem"
+            @click="action.method"
+          >
+            {{ action.displayName }}
+          </div>
+        </div>
       </div>
     </transition>
   </div>
@@ -38,11 +47,11 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 // @ts-ignore
 import { directive as onClickaway } from "vue-clickaway";
-import { Link } from "@/types/common";
+import { BaseContextAction } from "@/types/common";
 
 @Component({ name: "base-context-menu", directives: { onClickaway } })
 export default class BaseContextMenu extends Vue {
-  @Prop({ default: [] }) links!: Link;
+  @Prop({ default: [] }) actions!: BaseContextAction;
   isActive: boolean = false;
   hideMenu() {
     this.isActive = false;

@@ -19,8 +19,6 @@
     <template #content>
       <base-translation-card
         :id="key"
-        @selected="handleSelectTranslations"
-        @unselected="handleUnselectTranslations"
         v-for="(translationGroup, key) in translationsState.translations"
         :key="generateKey(key)"
         :translation-group="translationGroup"
@@ -28,7 +26,7 @@
       />
       <div
         class="fixed bottom-0 left-0 w-full p-3 bg-indigo-400 flex justify-between"
-        v-if="selectedTranslations.length"
+        v-if="translationsState.selectedTranslations.length"
       >
         <div class="flex">
           <base-button
@@ -46,28 +44,14 @@
         </div>
         <div>
           <base-button
-            @click="showPrompt = true"
+            @click="handleSetPrompt"
             class="flex items-center bg-white"
             ><eva-icon name="trash-2-outline" class="w-8" fill="#fff" />Delete
-            {{ selectedTranslations.length }} translation pairs</base-button
+            {{ translationsState.selectedTranslations.length }} translation
+            pairs</base-button
           >
         </div>
       </div>
-      <base-prompt
-        v-if="showPrompt"
-        @cancel="showPrompt = false"
-        @proceed="handleDelete"
-      >
-        <template #header
-          >Delete {{ selectedTranslations.length }} translations</template
-        >
-        <template #content
-          >Are you sure you want to delete these translations? All of the data
-          will be permanently removed from our servers forever. This action
-          cannot be undone.</template
-        >
-        <template #cta>Delete</template>
-      </base-prompt>
     </template>
   </base-page>
 </template>
@@ -76,9 +60,10 @@
 import { Component, Vue } from "vue-property-decorator";
 import { Translation, TranslationsState } from "@/types/translations";
 import TranslationsApi from "@/api/translations-api";
-import { Action, State } from "vuex-class";
+import { Action, Mutation, State } from "vuex-class";
 import router from "@/router";
 import { ProjectsState } from "@/types/projects";
+import { Prompt } from "@/types/common";
 @Component({ name: "project" })
 export default class Proejct extends Vue {
   selectedTranslations: string[] = [];
@@ -96,18 +81,40 @@ export default class Proejct extends Vue {
   }) => void;
 
   @Action("deleteTranslations", { namespace: "translations" })
-  deleteTranslations!: (input: { translationKeys: string[] }) => void;
+  deleteTranslations!: () => void;
 
   @Action("uploadTranslationsFromFile", { namespace: "translations" })
   uploadTranslationsFromFile!: (file: File) => void;
+
+  @Mutation("translations/SET_SELECTED_TRANSLATIONS")
+  setSelectedTranslations!: (translations: string[]) => void;
+
+  @Mutation("common/SET_PROMPT")
+  setPrompt!: (input: Prompt) => void;
+
+  handleSetPrompt() {
+    this.setPrompt({
+      show: true,
+      title: `Delete ${this.translationsState.selectedTranslations.length} translations`,
+      description:
+        "Are you sure you want to delete these translations? All of the data will be permanently removed from our servers forever. This action cannot be undone.",
+      action: this.handleDelete,
+    });
+  }
 
   navigateToCreateTranslation() {
     router.push({ name: "NewTranslation" });
   }
 
-  deselectAllTranslations() {}
+  deselectAllTranslations() {
+    this.setSelectedTranslations([]);
+  }
 
-  selectAllTranslations() {}
+  selectAllTranslations() {
+    this.setSelectedTranslations(
+      Object.keys(this.translationsState.translations)
+    );
+  }
 
   handleSelectTranslations(transKey: string) {
     this.selectedTranslations.push(transKey);
@@ -121,11 +128,7 @@ export default class Proejct extends Vue {
   }
 
   handleDelete() {
-    this.showPrompt = false;
-    this.deleteTranslations({
-      translationKeys: this.selectedTranslations,
-    });
-    this.selectedTranslations = [];
+    this.deleteTranslations();
   }
 
   handleFileChange(event: InputEvent) {

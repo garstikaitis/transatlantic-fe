@@ -48,6 +48,6 @@ requireComponent.keys().forEach((fileName) => {
 
 Vue.component("v-select", vSelect);
 Vue.component("v-count-to", countTo);
-Vue.component("base-checkbox", PrettyCheck);
+Vue.component("p-checkbox", PrettyCheck);
 Vue.use(EvaIcons);
 Vue.use(VueSpinnersCss);

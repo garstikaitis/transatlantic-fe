@@ -16,7 +16,7 @@
               :key="organization.id"
               @click="handleSetActiveOrganization(organization)"
             >
-              <div class="space-y-4">
+              <div class="space-y-4 cursor-pointer">
                 <div class="aspect-w-3 aspect-h-2">
                   <img
                     class="object-cover shadow-lg rounded-lg"

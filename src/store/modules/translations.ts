@@ -13,6 +13,7 @@ export const rootState: TranslationsState = {
   isLoading: false,
   isSuccess: false,
   isError: false,
+  selectedTranslations: [],
 };
 
 export const mutations: MutationTree<TranslationsState> = {
@@ -22,6 +23,10 @@ export const mutations: MutationTree<TranslationsState> = {
   SET_TRANSLATIONS(state: TranslationsState, payload: Translation[]) {
     // @ts-ignore
     state.translations = payload;
+  },
+  SET_SELECTED_TRANSLATIONS(state: TranslationsState, payload: Translation[]) {
+    // @ts-ignore
+    state.selectedTranslations = payload;
   },
   SET_IS_LOADING(state: TranslationsState, payload: boolean) {
     state.isLoading = payload;
@@ -35,19 +40,34 @@ export const mutations: MutationTree<TranslationsState> = {
 };
 
 export const actions: ActionTree<TranslationsState, RootState> = {
-  async deleteTranslations(
-    { dispatch, commit, rootState },
-    { translationKeys }
-  ) {
+  async deleteTranslations({ dispatch, commit, rootState, state }) {
     const projectId = rootState.projects.activeProject!.id.toString();
+    const translationKeys = state.selectedTranslations;
     commit("SET_IS_LOADING", true);
-    const { success } = await new TranslationsApi().deleteTranslations(
-      projectId,
-      translationKeys
-    );
+    await new TranslationsApi().deleteTranslations(projectId, translationKeys);
     await dispatch("getTranslations", {
       projectId: projectId,
     });
+    commit("SET_SELECTED_TRANSLATIONS", []);
+    commit(
+      "common/SET_NOTIFICATION",
+      {
+        show: true,
+        title: "Succesfully deleted",
+        description: "Deleted translations are no longer available",
+      },
+      { root: true }
+    );
+    commit(
+      "common/SET_PROMPT",
+      {
+        show: false,
+        title: "",
+        description: "",
+        action: () => {},
+      },
+      { root: true }
+    );
     commit("SET_IS_LOADING", false);
   },
   async uploadTranslationsFromFile({ commit, state, rootState }, file) {
@@ -79,7 +99,7 @@ export const actions: ActionTree<TranslationsState, RootState> = {
       projectId,
     });
     if (data.success) {
-      dispatch("getTranslations", projectId);
+      dispatch("getTranslations", { projectId });
     }
     commit("SET_IS_LOADING", false);
   },
@@ -121,7 +141,7 @@ export const actions: ActionTree<TranslationsState, RootState> = {
       projectId,
     });
     if (data.success) {
-      dispatch("getTranslations", projectId);
+      dispatch("getTranslations", { projectId });
     }
   },
 };

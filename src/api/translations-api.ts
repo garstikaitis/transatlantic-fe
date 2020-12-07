@@ -25,13 +25,16 @@ export default class ProjectsApi {
   }
   async getTranslations(
     projectId: number,
-    searchValue?: string
+    searchValue?: string,
+    page: number
   ): Promise<GetTranslationsResponse> {
     const { data } = await axios.post("/translations", {
       projectId,
       searchValue,
+      page: 1,
     });
-    return data;
+    console.log(data);
+    return data.data.data;
   }
 
   async createTranslation(

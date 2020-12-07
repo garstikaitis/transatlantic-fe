@@ -1,13 +1,18 @@
 <template>
   <div id="app" class="p-4 bg-white overflow-hidden">
+    <base-notification v-if="commonState.notification.show" />
+    <base-prompt v-if="commonState.prompt.show" />
     <router-view />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { State } from "vuex-class";
+import { CommonState } from "./types/common";
 @Component({ name: "App" })
 export default class App extends Vue {
+  @State("common") commonState!: CommonState;
   mounted() {
     window.postMessage({ name: "loaded", value: true }, "*");
   }

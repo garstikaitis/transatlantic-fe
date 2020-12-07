@@ -81,31 +81,32 @@
                     class="text-lg leading-6 font-medium text-gray-900"
                     id="modal-headline"
                   >
-                    <slot name="header">
-                      Deactivate account
-                    </slot>
+                    {{ commonState.prompt.title }}
                   </h3>
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      <slot name="content">
-                        Are you sure you want to deactivate your account? All of
-                        your data will be permanently removed from our servers
-                        forever. This action cannot be undone.
-                      </slot>
+                      {{ commonState.prompt.description }}
                     </p>
                   </div>
                 </div>
               </div>
               <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                 <button
-                  @click="$emit('proceed')"
+                  @click="commonState.prompt.action"
                   type="button"
                   class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                 >
-                  <slot name="cta">Proceed</slot>
+                  Proceed
                 </button>
                 <button
-                  @click="$emit('cancel')"
+                  @click="
+                    setPrompt({
+                      show: false,
+                      title: '',
+                      description: '',
+                      action: () => {},
+                    })
+                  "
                   type="button"
                   class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                 >
@@ -121,7 +122,14 @@
 </template>
 
 <script lang="ts">
+import { CommonState, Prompt } from "@/types/common";
 import { Component, Vue, Prop } from "vue-property-decorator";
+import { Mutation, State } from "vuex-class";
 @Component({ name: "base-prompt" })
-export default class BasePrompt extends Vue {}
+export default class BasePrompt extends Vue {
+  @State("common") commonState!: CommonState;
+
+  @Mutation("common/SET_PROMPT")
+  setPrompt!: (input: Prompt) => void;
+}
 </script>

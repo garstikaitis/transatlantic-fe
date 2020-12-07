@@ -27,4 +27,5 @@ export interface TranslationsState {
   isError: boolean;
   activeTranslation: Translation | null;
   translations: TranslationGroup;
+  selectedTranslations: string[];
 }

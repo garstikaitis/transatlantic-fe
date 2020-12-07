@@ -1,14 +1,16 @@
 <template>
   <div class="mb-8 bg-white p-4 shadow rounded-lg">
-    <div class="text-indigo-500 font-semibold mb-4 flex cursor-pointer">
+    <div
+      class="text-indigo-500 font-semibold mb-4 flex cursor-pointer flex items-center"
+    >
       <base-checkbox
-        :value="translationKey"
-        v-model="selectedTranslations"
-        @change="handleSelect"
         class="mr-2"
-        ref="checkbox"
+        :value="translationIsSelected"
+        @input="handleSelect"
       />
-      {{ translationKey.toUpperCase() }}
+      <span @click="handleSelect(!translationIsSelected)">{{
+        translationKey.toUpperCase()
+      }}</span>
     </div>
     <div class="flex flex-col">
       <div
@@ -44,7 +46,7 @@
 import { ProjectsState } from "@/types/projects";
 import { Translation, TranslationsState } from "@/types/translations";
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Action, State } from "vuex-class";
+import { Action, Mutation, State } from "vuex-class";
 import _uniqBy from "lodash/uniqBy";
 import { IRenderTranslation } from "@/types/common";
 // @ts-ignore
@@ -77,9 +79,18 @@ export default class BaseTranslationCard extends Vue {
   @Action("createTranslation", { namespace: "translations" })
   createTranslation!: (input: CreateTranslationRequest) => void;
 
+  @Mutation("translations/SET_SELECTED_TRANSLATIONS")
+  setSelectedTranslations!: (translations: string[]) => void;
+
   keyToEdit: string | null = null;
   translationValueBeforeEdit: string = "";
   translationValueAfterEdit: string = "";
+
+  get translationIsSelected() {
+    return this.translationsState.selectedTranslations.includes(
+      this.translationKey
+    );
+  }
 
   makeEditable(key: string, oldValue: string) {
     this.translationValueBeforeEdit = oldValue;
@@ -90,14 +101,17 @@ export default class BaseTranslationCard extends Vue {
     this.translationValueAfterEdit = value;
   }
 
-  handleSelect(data: string[]) {
-    if (data.length) {
-      this.$emit("selected", this.translationKey);
-      // this.$refs.checkbox.modelValue = [this.translationKey];
+  handleSelect(data: boolean) {
+    const currentSelections = this.translationsState.selectedTranslations;
+    if (data) {
+      currentSelections.push(this.translationKey);
     } else {
-      this.$emit("unselected", this.translationKey);
-      // this.$refs.checkbox.modelValue = [];
+      const index = currentSelections.findIndex(
+        (key) => key === this.translationKey
+      );
+      currentSelections.splice(index, 1);
     }
+    this.setSelectedTranslations(currentSelections);
   }
 
   saveTranslation(localeId: number) {

@@ -1,27 +1,47 @@
-import { CommonState, RootState } from "@/types/common";
+import {
+  CommonState,
+  Prompt,
+  RootState,
+  TransNotification,
+} from "@/types/common";
 import { Module, GetterTree, MutationTree } from "vuex";
 
 const namespaced: boolean = true;
 
 export const rootState: CommonState = {
-  showPrompt: false,
-};
-
-export const getters: GetterTree<CommonState, RootState> = {
-  showPrompt(state): boolean {
-    return state.showPrompt;
+  prompt: {
+    show: false,
+    title: "",
+    description: "",
+    action: () => {},
+  },
+  notification: {
+    show: false,
+    title: "",
+    description: "",
   },
 };
 
 export const mutations: MutationTree<CommonState> = {
-  SET_SHOW_PROMPT(state: CommonState, payload: boolean) {
-    state.showPrompt = payload;
+  SET_PROMPT(state: CommonState, payload: Prompt) {
+    state.prompt = payload;
+  },
+  SET_NOTIFICATION(state: CommonState, notification: TransNotification) {
+    state.notification = notification;
+    if (notification.show) {
+      setTimeout(() => {
+        state.notification = {
+          show: false,
+          title: "",
+          description: "",
+        };
+      }, 5000);
+    }
   },
 };
 
 export const common: Module<CommonState, RootState> = {
   namespaced,
   state: rootState,
-  getters,
   mutations,
 };

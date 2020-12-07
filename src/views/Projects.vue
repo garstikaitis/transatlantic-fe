@@ -9,8 +9,8 @@
     ></ellipsis-loader>
     <div
       class="flex flex-col items-center mt-8"
-      slot="content-loading"
-      v-if="projects.projects.length <= 0 && !projects.isLoading"
+      slot="content-not-found"
+      v-else-if="projects.projects.length == 0"
     >
       <img class="w-64" src="@/assets/not_found.svg" />
       <div class="mt-8">
@@ -108,7 +108,10 @@
                     <td
                       class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
                     >
-                      <base-context-menu :links="links">
+                      <base-context-menu
+                        @click="projectId = project.id"
+                        :actions="actions"
+                      >
                         <eva-icon
                           name="more-vertical-outline"
                           slot="trigger"
@@ -118,8 +121,6 @@
                       </base-context-menu>
                     </td>
                   </tr>
-
-                  <!-- More rows... -->
                 </tbody>
               </table>
             </div>
@@ -139,21 +140,25 @@ import { Action, Mutation, State } from "vuex-class";
 import { differenceInDays } from "date-fns";
 // @ts-ignore
 import { directive as onClickaway } from "vue-clickaway";
-import { Link } from "@/types/common";
+import { BaseContextAction } from "@/types/common";
 @Component({ name: "projects", directives: { onClickaway } })
 export default class Projects extends Vue {
   showTooltipIndex: number | null = null;
-  links: Link[] = [
+  projectId: number | null = null;
+  actions: BaseContextAction[] = [
     {
       name: "ProjectDetails",
       displayName: "Details",
       params: {
-        id: 20,
+        id: this.projectId,
       },
+      type: "link",
     },
     {
       name: "DeleteProject",
       displayName: "Delete",
+      type: "method",
+      method: () => this.deleteProject(this.projectId!),
     },
   ];
   @State("organizations") organizations!: OrganizationState;

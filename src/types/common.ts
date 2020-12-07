@@ -10,7 +10,8 @@ export interface RootState {
 }
 
 export interface CommonState {
-  showPrompt: boolean;
+  prompt: Prompt;
+  notification: TransNotification;
 }
 
 export interface EloquentModel {
@@ -34,8 +35,28 @@ export interface IframeEvent {
   text: string;
 }
 
-export interface Link {
+export interface BaseContextAction {
   name: string;
   displayName: string;
   params?: object;
+  type: "link" | "method";
+  method?: () => void;
+}
+
+export interface TransNotification {
+  show: boolean;
+  title: string;
+  description: string;
+}
+
+export interface Prompt {
+  show: boolean;
+  title: string;
+  description: string;
+  action: () => void;
+}
+export interface TransNotification {
+  show: boolean;
+  title: string;
+  description: string;
 }
