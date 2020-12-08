@@ -21,6 +21,11 @@
       >
     </div>
     <template #content>
+      <base-input-icon
+        class="mb-4"
+        placeholder="Search for translation. Try searching key or value"
+        v-model="searchValue"
+      />
       <base-translation-card
         :id="key"
         v-for="(translationGroup, key) in translationsState.translations"
@@ -62,17 +67,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { Translation, TranslationsState } from "@/types/translations";
 import TranslationsApi from "@/api/translations-api";
 import { Action, Mutation, State } from "vuex-class";
 import router from "@/router";
 import { ProjectsState } from "@/types/projects";
 import { Prompt } from "@/types/common";
+import _debounce from "lodash/debounce";
+import Debounce from "@/utils/decorators";
 @Component({ name: "project" })
 export default class Proejct extends Vue {
   selectedTranslations: string[] = [];
   showPrompt: boolean = false;
+  searchValue: string = "";
   @State("translations") translationsState!: TranslationsState;
   @State("projects") projectsState!: ProjectsState;
 
@@ -84,6 +92,15 @@ export default class Proejct extends Vue {
     projectId: number;
     searchValue?: string;
   }) => void;
+
+  @Watch("searchValue")
+  @Debounce(500)
+  onSearchValueChanged(newVal: string, oldVal: string) {
+    this.getTranslations({
+      projectId: this.projectsState.activeProject!.id,
+      searchValue: newVal,
+    });
+  }
 
   @Action("deleteTranslations", { namespace: "translations" })
   deleteTranslations!: () => void;
