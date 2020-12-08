@@ -2,7 +2,7 @@
   <div>
     <base-top-navigation />
     <base-side-navigation />
-    <div class="bg-gray-100 min-h-screen pt-20 pl-20 pr-5">
+    <div class="bg-gray-100 min-h-screen pt-20 pl-20 pr-5" v-bind="$attrs">
       <div class="w-full justify-between flex items-center mb-5 mt-4">
         <div class="flex items-center">
           <eva-icon

@@ -1,4 +1,4 @@
-import { RootState } from "@/types/common";
+import { Pagination, RootState } from "@/types/common";
 import { Translation, TranslationsState } from "@/types/translations";
 import { Module, MutationTree, ActionTree } from "vuex";
 import TranslationsApi from "@/api/translations-api";
@@ -14,6 +14,10 @@ export const rootState: TranslationsState = {
   isSuccess: false,
   isError: false,
   selectedTranslations: [],
+  pagination: {
+    totalPages: 0,
+    currentPage: 0,
+  },
 };
 
 export const mutations: MutationTree<TranslationsState> = {
@@ -36,6 +40,9 @@ export const mutations: MutationTree<TranslationsState> = {
   },
   SET_IS_ERROR(state: TranslationsState, payload: boolean) {
     state.isError = payload;
+  },
+  SET_PAGINATION(state: TranslationsState, payload: Pagination) {
+    state.pagination = payload;
   },
 };
 
@@ -103,15 +110,17 @@ export const actions: ActionTree<TranslationsState, RootState> = {
     }
     commit("SET_IS_LOADING", false);
   },
-  async getTranslations({ commit }, { projectId, searchValue }) {
+  async getTranslations({ commit }, { projectId, searchValue, page }) {
     return new Promise(async (resolve, reject) => {
       commit("SET_IS_LOADING", true);
       const data = await new TranslationsApi().getTranslations(
         projectId,
-        searchValue
+        searchValue,
+        page
       );
       if (data.success) {
-        commit("SET_TRANSLATIONS", data.data);
+        commit("SET_TRANSLATIONS", data.data.results);
+        commit("SET_PAGINATION", data.data.pagination);
         resolve(true);
       }
       commit("SET_IS_LOADING", false);

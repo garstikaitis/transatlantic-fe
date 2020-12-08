@@ -1,4 +1,4 @@
-import { EloquentModel } from "./common";
+import { EloquentModel, Pagination } from "./common";
 import { Locale } from "./locales";
 import { Organization } from "./organizations";
 import { Project } from "./projects";
@@ -28,4 +28,5 @@ export interface TranslationsState {
   activeTranslation: Translation | null;
   translations: TranslationGroup;
   selectedTranslations: string[];
+  pagination: Pagination;
 }

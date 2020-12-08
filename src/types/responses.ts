@@ -1,3 +1,4 @@
+import { Pagination } from "./common";
 import { Locale } from "./locales";
 import { Organization, OrganizationUser } from "./organizations";
 import { Project } from "./projects";
@@ -53,7 +54,10 @@ export interface GetAllLocalesResponse extends BaseResponse {
 }
 
 export interface GetTranslationsResponse extends BaseResponse {
-  data: Translation[];
+  data: {
+    results: Translation[];
+    pagination: Pagination;
+  };
 }
 
 export interface CreateTranslationResponse extends BaseResponse {

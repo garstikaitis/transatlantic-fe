@@ -60,3 +60,8 @@ export interface TransNotification {
   title: string;
   description: string;
 }
+
+export interface Pagination {
+  currentPage: number;
+  totalPages: number;
+}

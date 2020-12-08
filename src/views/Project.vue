@@ -1,5 +1,9 @@
 <template>
-  <base-page title="Translations">
+  <base-page
+    title="Translations"
+    :show-pagination="true"
+    class="pb-16 bg-gray-100"
+  >
     <div class="flex items-center" slot="top-button">
       <input
         @change="handleFileChange"
@@ -24,8 +28,9 @@
         :translation-group="translationGroup"
         :translation-key="key"
       />
+      <base-pagination :pagination="translationsState.pagination" />
       <div
-        class="fixed bottom-0 left-0 w-full p-3 bg-indigo-400 flex justify-between"
+        class="fixed bottom-0 left-0 w-full p-3 bg-indigo-400 flex justify-between z-40"
         v-if="translationsState.selectedTranslations.length"
       >
         <div class="flex">
