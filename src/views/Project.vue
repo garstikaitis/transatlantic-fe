@@ -21,11 +21,25 @@
       >
     </div>
     <template #content>
-      <base-input-icon
-        class="mb-4"
-        placeholder="Search for translation. Try searching key or value"
-        v-model="searchValue"
-      />
+      <div class="flex mb-4 w-full">
+        <base-input-icon
+          placeholder="Search for translation. Try searching key or value"
+          class="w-full"
+          :value="translationsState.searchTerm"
+          @input="handleSearchTermUpdate"
+        />
+        <base-button
+          class="rounded-r-md rounded-l-none"
+          @click="
+            getTranslations({
+              page: 1,
+              searchValue: translationsState.searchTerm,
+              projectId: projectsState.activeProject.id,
+            })
+          "
+          >Search</base-button
+        >
+      </div>
       <base-translation-card
         :id="key"
         v-for="(translationGroup, key) in translationsState.translations"
@@ -90,17 +104,14 @@ export default class Proejct extends Vue {
   @Action("getTranslations", { namespace: "translations" })
   getTranslations!: (input: {
     projectId: number;
+    page: number;
     searchValue?: string;
   }) => void;
 
-  @Watch("searchValue")
-  @Debounce(500)
-  onSearchValueChanged(newVal: string, oldVal: string) {
-    this.getTranslations({
-      projectId: this.projectsState.activeProject!.id,
-      searchValue: newVal,
-    });
-  }
+  @Action("getAllTranslations", { namespace: "translations" })
+  getAllTranslations!: (projectId: number) => void;
+
+  onSearchValueChanged(newVal: string, oldVal: string) {}
 
   @Action("deleteTranslations", { namespace: "translations" })
   deleteTranslations!: () => void;
@@ -114,6 +125,9 @@ export default class Proejct extends Vue {
   @Mutation("common/SET_PROMPT")
   setPrompt!: (input: Prompt) => void;
 
+  @Mutation("translations/SET_SEARCH_TERM")
+  handleSearchTermUpdate!: (input: string) => void;
+
   handleSetPrompt() {
     this.setPrompt({
       show: true,
@@ -122,6 +136,26 @@ export default class Proejct extends Vue {
         "Are you sure you want to delete these translations? All of the data will be permanently removed from our servers forever. This action cannot be undone.",
       action: this.handleDelete,
     });
+  }
+
+  handleEventSearch(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      if (this.translationsState.searchTerm.length) {
+        this.getTranslations({
+          page: 1,
+          searchValue: this.translationsState.searchTerm,
+          projectId: this.projectsState.activeProject!.id,
+        });
+      }
+    }
+  }
+
+  created() {
+    window.addEventListener("keydown", this.handleEventSearch);
+  }
+
+  destroyed() {
+    window.removeEventListener("keydown", this.handleEventSearch);
   }
 
   navigateToCreateTranslation() {
@@ -166,6 +200,7 @@ export default class Proejct extends Vue {
       // @ts-ignore
       searchValue,
     });
+    this.getAllTranslations(Number(this.$route.params.id));
   }
   generateKey(key: string) {
     return key.split(".").join("");

@@ -15,6 +15,7 @@ export interface Translation extends EloquentModel {
   user: User;
   projectId: number;
   project: Project;
+  sortingRank?: number;
 }
 
 export interface TranslationGroup {
@@ -29,4 +30,6 @@ export interface TranslationsState {
   translations: TranslationGroup;
   selectedTranslations: string[];
   pagination: Pagination;
+  searchTerm: string;
+  allTranslations: Translation[];
 }

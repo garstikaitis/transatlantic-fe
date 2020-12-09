@@ -10,6 +10,7 @@ import {
   CreateTranslationResponse,
   UploadTranslationsFromFileResponse,
   DeleteTranslationsResponse,
+  GetAllTranslationsResponse,
 } from "@/types/responses";
 
 export default class ProjectsApi {
@@ -32,6 +33,15 @@ export default class ProjectsApi {
       projectId,
       searchValue,
       page,
+    });
+    return data;
+  }
+
+  async getAllTranslations(
+    projectId: number
+  ): Promise<GetAllTranslationsResponse> {
+    const { data } = await axios.post("/translations/all", {
+      projectId,
     });
     return data;
   }

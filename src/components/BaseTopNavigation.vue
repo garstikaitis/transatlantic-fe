@@ -8,10 +8,7 @@
       ><input class="search-input" placeholder="Search your projects.." />
     </div>
     <div class="w-1/5 flex mr-16 cursor-pointer items-center justify-end">
-      <base-context-menu
-        :actions="topNavigationLinks"
-        @option-selected="handleNavigationOptionSelected"
-      >
+      <base-context-menu :actions="topNavigationLinks">
         <div
           slot="trigger"
           class="relative max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -19,18 +16,6 @@
           <img :src="userImage" class="w-8" />
         </div>
       </base-context-menu>
-      <!-- <div
-        v-if="showTooltip"
-        class="mt-12 absolute rounded-lg bg-white p-3 shadow w-32"
-        style="top: 20px;"
-      >
-        <div>
-          <span>Hello {{ auth.user.firstName }}</span>
-        </div>
-        <hr class="my-4" />
-        <div class="hover:text-green-600">Settings</div>
-        <div @click="logout" class="hover:text-green-600 mt-2">Logout</div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -72,14 +57,17 @@ export default class BaseTopNavigation extends Vue {
       type: "link",
     },
     {
+      name: "SelectOrganization",
+      displayName: "Organizations",
+      type: "link",
+    },
+    {
       name: "Logout",
       displayName: "Logout",
       type: "method",
       method: () => this.logout(),
     },
   ];
-
-  handleNavigationOptionSelected(option: BaseContextAction) {}
 
   handleSelectedOrganization(organization: Organization) {
     this.getOrganizationById({ organizationId: organization.id });

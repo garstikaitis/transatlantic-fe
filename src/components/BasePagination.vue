@@ -41,7 +41,7 @@
           aria-label="Pagination"
         >
           <div
-            @click="fetchNextPageOfTranslations"
+            @click="fetchPrevPageOfTranslations"
             class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
             :class="{
               'cursor-pointer': allowBack,
@@ -73,7 +73,7 @@
             {{ page > 0 ? page : "..." }}
           </div>
           <div
-            @click="fetchPrevPageOfTranslations"
+            @click="fetchNextPageOfTranslations"
             class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
             :class="{
               'cursor-pointer': allowNext,

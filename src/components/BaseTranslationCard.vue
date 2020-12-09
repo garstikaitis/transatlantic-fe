@@ -28,14 +28,24 @@
         >
           {{ locale.value }}
         </div>
-        <div class="flex" v-else v-on-clickaway="setEditableKeyToNull">
-          <base-input
+        <div
+          class="flex items-center"
+          v-else
+          v-on-clickaway="setEditableKeyToNull"
+        >
+          <base-textarea
             :value="translationValueBeforeEdit"
             @input="handleUpdateTranslation"
           />
-          <base-button @click="saveTranslation(locale.localeId)" class="ml-2"
-            >Save</base-button
-          >
+          <base-button-circle
+            v-if="translationValueAfterEdit !== translationValueBeforeEdit"
+            @click="saveTranslation(locale.localeId)"
+            class="ml-4"
+            ><eva-icon
+              style="margin-left: -0.24rem; margin-top: 0.2rem;"
+              name="checkmark-outline"
+              fill="white"
+          /></base-button-circle>
         </div>
       </div>
     </div>
@@ -115,11 +125,21 @@ export default class BaseTranslationCard extends Vue {
   }
 
   saveTranslation(localeId: number) {
-    const translation = this.translationsState.translations[
-      this.translationKey
-    ].find(
-      (translation) =>
-        translation.transValue === this.translationValueBeforeEdit
+    const translation = this.translationsState.allTranslations.find(
+      (translation) => {
+        if (translation.transKey === this.translationKey) {
+          console.log(
+            translation.transKey,
+            this.translationKey,
+            translation.transValue,
+            this.translationValueBeforeEdit
+          );
+        }
+        return (
+          translation.transKey === this.translationKey &&
+          translation.transValue === this.translationValueBeforeEdit
+        );
+      }
     )!;
     let input: UpdateTranslationRequest = {
       transKey: this.translationKey,
@@ -146,29 +166,37 @@ export default class BaseTranslationCard extends Vue {
 
   get translationsMerged() {
     const obj: IRenderTranslation = {};
-    const mainLocale = this.projectsState.activeProject!.locales.find(
-      (locale) => locale.pivot.isMainLocale
-    );
-    this.translationGroup.forEach((translation) => {
-      obj[translation.locale.iso] = {
-        translationId: translation.id,
-        value: translation.transValue,
-        locale: translation.locale.name,
-        localeId: translation.localeId,
-        isMainLocale: translation.localeId === mainLocale!.id,
-      };
-    });
-    this.projectsState.activeProject!.locales.forEach((locale) => {
-      if (!obj[locale.iso]) {
-        obj[locale.iso] = {
-          translationId: null,
-          value: "Empty",
-          locale: locale.name,
-          localeId: locale.id,
-          isMainLocale: locale.id === mainLocale!.id,
+    if (this.projectsState.activeProject) {
+      const mainLocale = this.projectsState.activeProject!.locales.find(
+        (locale) => locale.pivot.isMainLocale
+      );
+      this.translationGroup.forEach((translation) => {
+        obj[translation.locale.iso] = {
+          translationId: translation.id,
+          value: translation.transValue,
+          locale: translation.locale.name,
+          localeId: translation.localeId,
+          isMainLocale: translation.localeId === mainLocale!.id,
         };
-      }
-    });
+        this.projectsState.activeProject!.locales.forEach((locale) => {
+          if (!obj[locale.iso]) {
+            const foundTranslation = this.translationsState.allTranslations.find(
+              (trans) =>
+                translation.transKey === trans.transKey &&
+                trans.locale.iso !== translation.locale.iso
+            );
+            obj[locale.iso] = {
+              translationId: null,
+              value: foundTranslation ? foundTranslation.transValue : "Empty",
+              locale: locale.name,
+              localeId: locale.id,
+              isMainLocale: locale.id === mainLocale!.id,
+            };
+          }
+        });
+      });
+    }
+
     return obj;
   }
 }

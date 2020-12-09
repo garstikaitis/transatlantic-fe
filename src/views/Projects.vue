@@ -106,12 +106,10 @@
                       </span>
                     </td>
                     <td
+                      @click="projectId = project.id"
                       class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
                     >
-                      <base-context-menu
-                        @click="projectId = project.id"
-                        :actions="actions"
-                      >
+                      <base-context-menu :actions="actions">
                         <eva-icon
                           name="more-vertical-outline"
                           slot="trigger"
@@ -145,22 +143,24 @@ import { BaseContextAction } from "@/types/common";
 export default class Projects extends Vue {
   showTooltipIndex: number | null = null;
   projectId: number | null = null;
-  actions: BaseContextAction[] = [
-    {
-      name: "ProjectDetails",
-      displayName: "Details",
-      params: {
-        id: this.projectId,
+  get actions(): BaseContextAction[] {
+    return [
+      {
+        name: "ProjectDetails",
+        displayName: "Details",
+        params: {
+          id: this.projectId,
+        },
+        type: "link",
       },
-      type: "link",
-    },
-    {
-      name: "DeleteProject",
-      displayName: "Delete",
-      type: "method",
-      method: () => this.deleteProject(this.projectId!),
-    },
-  ];
+      {
+        name: "DeleteProject",
+        displayName: "Delete",
+        type: "method",
+        method: () => this.deleteProject(this.projectId!),
+      },
+    ];
+  }
   @State("organizations") organizations!: OrganizationState;
   @State("projects") projects!: ProjectsState;
 

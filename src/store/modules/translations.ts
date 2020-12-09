@@ -2,7 +2,7 @@ import { Pagination, RootState } from "@/types/common";
 import { Translation, TranslationsState } from "@/types/translations";
 import { Module, MutationTree, ActionTree } from "vuex";
 import TranslationsApi from "@/api/translations-api";
-import router from "@/router";
+import _groupBy from "lodash/groupBy";
 import { UpdateTranslationRequest } from "@/types/requests";
 const namespaced: boolean = true;
 
@@ -14,6 +14,8 @@ export const rootState: TranslationsState = {
   isSuccess: false,
   isError: false,
   selectedTranslations: [],
+  searchTerm: "",
+  allTranslations: [],
   pagination: {
     totalPages: 0,
     currentPage: 0,
@@ -43,6 +45,12 @@ export const mutations: MutationTree<TranslationsState> = {
   },
   SET_PAGINATION(state: TranslationsState, payload: Pagination) {
     state.pagination = payload;
+  },
+  SET_SEARCH_TERM(state: TranslationsState, payload: string) {
+    state.searchTerm = payload;
+  },
+  SET_ALL_TRANSLATIONS(state: TranslationsState, payload: Translation[]) {
+    state.allTranslations = payload;
   },
 };
 
@@ -106,26 +114,53 @@ export const actions: ActionTree<TranslationsState, RootState> = {
       projectId,
     });
     if (data.success) {
-      dispatch("getTranslations", { projectId });
+      // TODO: fix data population instead of reload
+      window.location.reload();
     }
     commit("SET_IS_LOADING", false);
   },
-  async getTranslations({ commit }, { projectId, searchValue, page }) {
+  async getTranslations({ commit, state }, { projectId, page }) {
     return new Promise(async (resolve, reject) => {
       commit("SET_IS_LOADING", true);
       const data = await new TranslationsApi().getTranslations(
         projectId,
-        searchValue,
+        state.searchTerm,
         page
       );
       if (data.success) {
-        commit("SET_TRANSLATIONS", data.data.results);
+        let results = data.data.results;
+        if (state.searchTerm.length) {
+          const allTranslations: Translation[] = [];
+          const keys = Object.keys(data.data.results);
+          keys.forEach((key) => {
+            data.data.results[key].forEach((translation) => {
+              allTranslations.push(translation);
+            });
+          });
+          // @ts-ignore
+          const sortedTranslations = allTranslations.sort((a, b) => {
+            if (a.sortingRank! > b.sortingRank!) return -1;
+            if (a.sortingRank! < b.sortingRank!) return 1;
+            if (a.sortingRank! === b.sortingRank!) return 0;
+          });
+          results = _groupBy(sortedTranslations, "transKey");
+        }
+        commit("SET_TRANSLATIONS", results);
         commit("SET_PAGINATION", data.data.pagination);
         resolve(true);
       }
       commit("SET_IS_LOADING", false);
       resolve(false);
     });
+  },
+
+  async getAllTranslations({ commit }, projectId) {
+    commit("SET_IS_LOADING", true);
+    const data = await new TranslationsApi().getAllTranslations(projectId);
+    if (data.success) {
+      commit("SET_ALL_TRANSLATIONS", data.data);
+    }
+    commit("SET_IS_LOADING", false);
   },
 
   async updateTranslation(
@@ -150,7 +185,8 @@ export const actions: ActionTree<TranslationsState, RootState> = {
       projectId,
     });
     if (data.success) {
-      dispatch("getTranslations", { projectId });
+      // TODO: fix data population instead of reload
+      window.location.reload();
     }
   },
 };

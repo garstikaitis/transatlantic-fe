@@ -4,22 +4,6 @@
     <div slot="content-loading" v-if="!projectToSave">
       <ellipsis-loader />
     </div>
-    <!-- <div slot="content" v-else>
-      <base-input v-model="projectToSave.name" label="Project name" />
-      <div class="flex flex-col">
-        <label class="mt-8 block text-sm">Project locales</label>
-        <div class="flex mt-1">
-          <div
-            class="bg-indigo-600 text-white text-sm w-max-content p-2 rounded-lg mr-2"
-            v-for="locale in projectToSave.locales"
-            :key="locale.id"
-            :class="{ 'font-bold': locale.pivot.isMainLocale }"
-          >
-            {{ locale.name }}
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div slot="content">
       <div>
         <div class="md:grid md:grid-cols-3 md:gap-6">
@@ -180,6 +164,7 @@ export default class ProjectDetails extends Vue {
       this.projectToSave!.id,
       this.organizationState.activeOrganization!.id
     );
+    // @ts-ignore
     this.apiKey = data;
   }
 
@@ -212,7 +197,7 @@ export default class ProjectDetails extends Vue {
         this.projectToSave!.id,
         this.organizationState.activeOrganization!.id
       );
-      // @ts-ignore
+
       this.apiKey = data.key;
     }, 500);
   }

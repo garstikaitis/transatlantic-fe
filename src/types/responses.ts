@@ -2,7 +2,7 @@ import { Pagination } from "./common";
 import { Locale } from "./locales";
 import { Organization, OrganizationUser } from "./organizations";
 import { Project } from "./projects";
-import { Translation } from "./translations";
+import { Translation, TranslationGroup } from "./translations";
 import { User } from "./user";
 
 export interface AuthenticateResponse extends BaseResponse {
@@ -55,7 +55,7 @@ export interface GetAllLocalesResponse extends BaseResponse {
 
 export interface GetTranslationsResponse extends BaseResponse {
   data: {
-    results: Translation[];
+    results: TranslationGroup;
     pagination: Pagination;
   };
 }
@@ -73,7 +73,9 @@ export interface FetchProjectResponse extends BaseResponse {
 }
 
 export interface GetFetchApiKeyForProjectResponse extends BaseResponse {
-  data: string;
+  data: {
+    key: string;
+  };
 }
 
 export interface UpdateProjectResposne extends BaseResponse {
@@ -92,4 +94,8 @@ export interface GetDashboardTotalsResponse extends BaseResponse {
   data: {
     total_translations: number;
   };
+}
+
+export interface GetAllTranslationsResponse extends BaseResponse {
+  data: Translation[];
 }
