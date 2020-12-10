@@ -164,6 +164,18 @@ export default class BaseTranslationCard extends Vue {
     this.keyToEdit = null;
   }
 
+  getTransValue(translation: Translation | undefined) {
+    const localesTotal = this.projectsState.activeProject!.locales.length;
+    if (localesTotal > 2) {
+      // @ts-ignore
+      if (translation && translation.translationId)
+        return translation.transValue;
+      else return "Empty";
+    }
+    if (translation) return translation.transValue;
+    return "Empty";
+  }
+
   get translationsMerged() {
     const obj: IRenderTranslation = {};
     if (this.projectsState.activeProject) {
@@ -187,11 +199,7 @@ export default class BaseTranslationCard extends Vue {
             );
             obj[locale.iso] = {
               translationId: null,
-              value:
-                // @ts-ignore
-                foundTranslation && foundTranslation.translationId
-                  ? foundTranslation.transValue
-                  : "Empty",
+              value: this.getTransValue(foundTranslation),
               locale: locale.name,
               localeId: locale.id,
               isMainLocale: locale.id === mainLocale!.id,
