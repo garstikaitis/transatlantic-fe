@@ -183,11 +183,15 @@ export default class BaseTranslationCard extends Vue {
             const foundTranslation = this.translationsState.allTranslations.find(
               (trans) =>
                 translation.transKey === trans.transKey &&
-                trans.locale.iso !== translation.locale.iso
+                translation.locale.iso !== trans.locale.iso
             );
             obj[locale.iso] = {
               translationId: null,
-              value: foundTranslation ? foundTranslation.transValue : "Empty",
+              value:
+                // @ts-ignore
+                foundTranslation && foundTranslation.translationId
+                  ? foundTranslation.transValue
+                  : "Empty",
               locale: locale.name,
               localeId: locale.id,
               isMainLocale: locale.id === mainLocale!.id,
