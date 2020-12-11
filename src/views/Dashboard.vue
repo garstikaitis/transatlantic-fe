@@ -77,7 +77,7 @@
                 </dt>
                 <dd>
                   <div class="text-lg font-medium text-gray-900">
-                    $30,659.45
+                    ${{ totals.payment }}
                   </div>
                 </dd>
               </dl>
