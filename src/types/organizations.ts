@@ -2,6 +2,7 @@ export interface Organization {
   id: number;
   name: string;
   subdomain: string;
+  logo: string | null;
 }
 
 export interface OrganizationState {

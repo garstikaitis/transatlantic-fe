@@ -9,7 +9,6 @@
     </label>
     <div class="mt-1">
       <input
-        :id="name"
         :name="name"
         :type="type"
         :required="required"

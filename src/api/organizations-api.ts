@@ -5,17 +5,41 @@ import {
   GetFetchApiKeyForProjectResponse,
   GetOrganizationByIdResponse,
 } from "@/types/responses";
+import { EditOrganizationRequest } from "@/types/requests";
 import axios from "axios";
 
 export default class OrganizationsApi {
   async createOrganization(
     name: string,
-    subdomain: string
+    subdomain: string,
+    logo: File
   ): Promise<CreateOrganizationResponse> {
-    const { data } = await axios.post("/organizations", {
-      name,
-      subdomain,
+    const fd = new FormData();
+    fd.append("name", name);
+    fd.append("subdomain", subdomain);
+    fd.append("logo", logo);
+    const { data } = await axios.post("/organizations", fd, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
     });
+    return data;
+  }
+  async editOrganization(input: EditOrganizationRequest) {
+    const fd = new FormData();
+    fd.append("name", input.name);
+    fd.append("subdomain", input.subdomain);
+    fd.append("newLogo", input.newLogo!);
+    fd.append("organizationId", input.organizationId);
+    const { data } = await axios.post(
+      `/organizations/edit/${input.organizationId}`,
+      fd,
+      {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      }
+    );
     return data;
   }
   async addUserToOrganization(

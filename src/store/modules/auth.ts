@@ -1,9 +1,11 @@
 import AuthApi from "@/api/auth-api";
+import UsersApi from "@/api/users-api";
 import router from "@/router";
 import { AuthState } from "@/types/auth";
 import { RootState } from "@/types/common";
 import { Organization } from "@/types/organizations";
-import { User } from "@/types/user";
+import { EditUserRequest, UpdateUserRequest } from "@/types/requests";
+import { User, UserRoleEnum } from "@/types/user";
 import Cookies from "js-cookie";
 import { Module, GetterTree, MutationTree, ActionTree } from "vuex";
 
@@ -17,6 +19,10 @@ export const rootState: AuthState = {
 export const getters: GetterTree<AuthState, RootState> = {
   isAuthenticated(state): boolean {
     return !!state?.user;
+  },
+  userIsSuperAdmin(state): boolean {
+    if (!state.user) return false;
+    return state.user.role === UserRoleEnum.SUPERADMIN;
   },
   userOrganizations(state): Organization[] | undefined {
     return state?.user?.organizations;
@@ -71,6 +77,36 @@ export const actions: ActionTree<AuthState, RootState> = {
       commit("SET_USER", null);
       commit("SET_TOKEN", null);
       router.push({ name: "Login" });
+    }
+  },
+  async updateUser({ commit }, updates: EditUserRequest) {
+    try {
+      const { success, data } = await new UsersApi().updateUser(updates);
+      if (success) {
+        commit("SET_USER", data);
+        commit(
+          "common/SET_NOTIFICATION",
+          {
+            show: true,
+            title: "Success",
+            description: "Successfuly updated user",
+          },
+          { root: true }
+        );
+        router.push({ name: "Dashboard" });
+      } else {
+        throw new Error("Error updating user");
+      }
+    } catch (e) {
+      commit(
+        "common/SET_NOTIFICATION",
+        {
+          show: true,
+          title: "Oops! Something went wrong",
+          description: "Error updating user",
+        },
+        { root: true }
+      );
     }
   },
 };

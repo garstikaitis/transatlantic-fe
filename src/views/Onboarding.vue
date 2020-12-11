@@ -65,6 +65,7 @@ export default class Onboarding extends Vue {
   createOrganization!: (input: {
     name: string;
     subdomain: string;
+    logo: File | null;
   }) => Promise<CreateOrganizationResponse>;
 
   @Action("addUserToOrganization", { namespace: "organizations" })
@@ -83,12 +84,15 @@ export default class Onboarding extends Vue {
   step = 1;
 
   async updateOnboarding() {
-    const data = await new UsersApi().updateUser(
-      this.auth!.user!.id,
-      this.firstName,
-      this.lastName,
-      false
-    );
+    const data = await new UsersApi().updateUser({
+      userId: this.auth!.user!.id,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.auth.user!.email,
+      newLogo: null,
+      role: this.auth.user!.role,
+      onboardingCompleted: false,
+    });
     if (data.success) {
       this.setUser(data.data);
       this.step++;
@@ -98,6 +102,7 @@ export default class Onboarding extends Vue {
     const data = await this.createOrganization({
       name: this.companyName,
       subdomain: this.subdomain,
+      logo: null,
     });
     if (data.success) {
       const map = await this.addUserToOrganization({
@@ -105,12 +110,15 @@ export default class Onboarding extends Vue {
         organizationId: data.data.id,
       });
       if (map.success) {
-        const final = await new UsersApi().updateUser(
-          this.auth!.user!.id,
-          this.firstName,
-          this.lastName,
-          true
-        );
+        const final = await new UsersApi().updateUser({
+          userId: this.auth!.user!.id,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.auth.user!.email,
+          newLogo: null,
+          role: this.auth.user!.role,
+          onboardingCompleted: true,
+        });
         if (final.success) {
           router.push({ name: "Dashboard" });
         }

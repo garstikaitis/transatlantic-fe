@@ -13,7 +13,8 @@
           slot="trigger"
           class="relative max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          <img :src="userImage" class="w-8" />
+          <span class="mr-2">Welcome, {{ auth.user.firstName }}</span>
+          <img :src="userImage" class="w-8 rounded-full" />
         </div>
       </base-context-menu>
     </div>
@@ -27,6 +28,7 @@ import { mapState, mapActions } from "vuex";
 import { AuthState } from "@/types/auth";
 import { Organization, OrganizationState } from "@/types/organizations";
 import { BaseContextAction } from "@/types/common";
+import { BaseResponse } from "@/types/responses";
 // @ts-ignore
 @Component({
   name: "base-top-navigation",
@@ -47,30 +49,39 @@ export default class BaseTopNavigation extends Vue {
   fetchUserOrganizations!: () => void;
 
   @Action("getOrganizationById", { namespace: "organizations" })
-  getOrganizationById!: (input: { organizationId: number }) => void;
+  getOrganizationById!: (input: {
+    organizationId: number;
+  }) => Promise<BaseResponse>;
 
   showTooltip: boolean = false;
-  topNavigationLinks: BaseContextAction[] = [
-    {
-      name: "Profile",
-      displayName: "Profile",
-      type: "link",
-    },
-    {
-      name: "SelectOrganization",
-      displayName: "Organizations",
-      type: "link",
-    },
-    {
-      name: "Logout",
-      displayName: "Logout",
-      type: "method",
-      method: () => this.logout(),
-    },
-  ];
+  get topNavigationLinks(): BaseContextAction[] {
+    return [
+      {
+        name: "Profile",
+        displayName: "Profile",
+        type: "link",
+      },
+      {
+        name: "SelectOrganization",
+        displayName: "Organizations",
+        type: "link",
+      },
+      {
+        name: "Logout",
+        displayName: "Logout",
+        type: "method",
+        method: () => this.logout(),
+      },
+    ];
+  }
 
-  handleSelectedOrganization(organization: Organization) {
-    this.getOrganizationById({ organizationId: organization.id });
+  async handleSelectedOrganization(organization: Organization) {
+    const { success, data } = await this.getOrganizationById({
+      organizationId: organization.id,
+    });
+    if (success) {
+      this.SET_ACTIVE_ORGANIZATION(data);
+    }
   }
   hideTooltip() {
     this.showTooltip = false;

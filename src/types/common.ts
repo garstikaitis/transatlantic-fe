@@ -65,3 +65,7 @@ export interface Pagination {
   currentPage: number;
   totalPages: number;
 }
+
+export interface HTMLInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
+}

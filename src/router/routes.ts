@@ -10,6 +10,9 @@ import NewProject from "@/views/NewProject.vue";
 import NewTranslation from "@/views/NewTranslation.vue";
 import SelectOrganization from "@/views/SelectOrganization.vue";
 import Payments from "@/views/Payments.vue";
+import CreateOrganization from "@/views/CreateOrganization.vue";
+import EditOrganization from "@/views/EditOrganization.vue";
+import User from "@/views/User.vue";
 
 const routes: Array<RouteConfig> = [
   {
@@ -56,9 +59,27 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/select-organization",
+    path: "/organizations",
     name: "SelectOrganization",
     component: SelectOrganization,
+    meta: {
+      requiresAuth: true,
+      requiresOrganization: false,
+    },
+  },
+  {
+    path: "/organizations/new",
+    name: "CreateOrganization",
+    component: CreateOrganization,
+    meta: {
+      requiresAuth: true,
+      requiresOrganization: false,
+    },
+  },
+  {
+    path: "/organizations/:id",
+    name: "EditOrganization",
+    component: EditOrganization,
     meta: {
       requiresAuth: true,
       requiresOrganization: false,
@@ -104,6 +125,15 @@ const routes: Array<RouteConfig> = [
     path: "/payments",
     name: "Payments",
     component: Payments,
+    meta: {
+      requiresAuth: true,
+      requiresOrganization: true,
+    },
+  },
+  {
+    path: "/user",
+    name: "Profile",
+    component: User,
     meta: {
       requiresAuth: true,
       requiresOrganization: true,

@@ -1,4 +1,5 @@
 import OrganizationsApi from "@/api/organizations-api";
+import router from "@/router";
 import { RootState } from "@/types/common";
 import { Organization, OrganizationState } from "@/types/organizations";
 import { CreateOrganizationResponse } from "@/types/responses";
@@ -35,12 +36,13 @@ export const mutations: MutationTree<OrganizationState> = {
 export const actions: ActionTree<OrganizationState, RootState> = {
   async createOrganization(
     { commit, dispatch },
-    { name, subdomain }
+    { name, subdomain, logo }
   ): Promise<CreateOrganizationResponse> {
     return new Promise(async (resolve, reject) => {
       const data = await new OrganizationsApi().createOrganization(
         name,
-        subdomain
+        subdomain,
+        logo
       );
       if (data.success) {
         commit("SET_ACTIVE_ORGANIZATION", data.data);
@@ -50,34 +52,56 @@ export const actions: ActionTree<OrganizationState, RootState> = {
       }
     });
   },
-  async getUserOrganizations({ commit, dispatch }) {
-    commit("SET_IS_LOADING", true);
-    const data = await new OrganizationsApi().getUserOrganizations();
+  async editOrganization(
+    { commit, dispatch },
+    { name, subdomain, newLogo, organizationId }
+  ) {
+    const data = await new OrganizationsApi().editOrganization({
+      name,
+      subdomain,
+      newLogo,
+      organizationId,
+    });
     if (data.success) {
-      commit("SET_IS_LOADING", false);
-      commit("SET_IS_SUCCESS", true);
-      commit("SET_ORGANIZATIONS", data.data);
-      if (data.data.length === 1) {
-        commit("SET_ACTIVE_ORGANIZATION", data.data[0]);
-      }
-    } else {
-      commit("SET_IS_LOADING", false);
-      commit("SET_IS_ERROR", true);
+      const success = await dispatch("getUserOrganizations");
+      if (success) router.push({ name: "SelectOrganization" });
     }
   },
+  async getUserOrganizations({ commit, dispatch }) {
+    return new Promise(async (resolve, reject) => {
+      commit("SET_IS_LOADING", true);
+      const data = await new OrganizationsApi().getUserOrganizations();
+      if (data.success) {
+        commit("SET_IS_LOADING", false);
+        commit("SET_IS_SUCCESS", true);
+        commit("SET_ORGANIZATIONS", data.data);
+        if (data.data.length === 1) {
+          commit("SET_ACTIVE_ORGANIZATION", data.data[0]);
+        }
+        resolve(true);
+      } else {
+        commit("SET_IS_LOADING", false);
+        commit("SET_IS_ERROR", true);
+        resolve(false);
+      }
+    });
+  },
   async getOrganizationById({ commit, dispatch }, { organizationId }) {
-    commit("SET_IS_LOADING", true);
-    const data = await new OrganizationsApi().getOrganizationById(
-      organizationId
-    );
-    if (data.success) {
-      commit("SET_IS_LOADING", false);
-      commit("SET_IS_SUCCESS", true);
-      commit("SET_ACTIVE_ORGANIZATION", data.data);
-    } else {
-      commit("SET_IS_LOADING", false);
-      commit("SET_IS_ERROR", true);
-    }
+    return new Promise(async (resolve, reject) => {
+      commit("SET_IS_LOADING", true);
+      const data = await new OrganizationsApi().getOrganizationById(
+        organizationId
+      );
+      if (data.success) {
+        commit("SET_IS_LOADING", false);
+        commit("SET_IS_SUCCESS", true);
+        resolve({ data: data.data, success: data.success });
+      } else {
+        commit("SET_IS_LOADING", false);
+        commit("SET_IS_ERROR", true);
+        resolve(false);
+      }
+    });
   },
   async addUserToOrganization(
     { commit, dispatch },

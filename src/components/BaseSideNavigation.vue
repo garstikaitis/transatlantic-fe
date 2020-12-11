@@ -2,11 +2,7 @@
   <div
     class="fixed top-0 left-0 bg-white flex flex-col p-3 h-screen shadow z-50"
   >
-    <img
-      :src="require('../assets/logo.png')"
-      style="width: 40px;"
-      class="mb-12 mt-2"
-    />
+    <img :src="logo" style="width: 40px;" class="mb-12 mt-2" />
 
     <router-link :to="{ name: 'Dashboard' }">
       <div class="mb-6 relative">
@@ -58,12 +54,22 @@
 
 <script lang="ts">
 import { AuthState } from "@/types/auth";
+import { OrganizationState } from "@/types/organizations";
 import { Vue, Component } from "vue-property-decorator";
 import { State } from "vuex-class";
 
 @Component({ name: "base-side-navigation" })
 export default class BaseSideNavigation extends Vue {
   @State("auth") auth!: AuthState;
+  @State("organizations") organizationState!: OrganizationState;
+
+  get logo() {
+    if (this.organizationState.activeOrganization) {
+      if (this.organizationState.activeOrganization!.logo)
+        return this.organizationState.activeOrganization.logo;
+      else return require("@/assets/company_logo_placeholder.svg");
+    }
+  }
 }
 </script>
 
