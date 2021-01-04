@@ -13,6 +13,7 @@ import Payments from "@/views/Payments.vue";
 import CreateOrganization from "@/views/CreateOrganization.vue";
 import EditOrganization from "@/views/EditOrganization.vue";
 import User from "@/views/User.vue";
+import LandingPage from "@/views/LandingPage.vue";
 
 const routes: Array<RouteConfig> = [
   {
@@ -137,6 +138,15 @@ const routes: Array<RouteConfig> = [
     meta: {
       requiresAuth: true,
       requiresOrganization: true,
+    },
+  },
+  {
+    path: "/",
+    name: "LandingPage",
+    component: LandingPage,
+    meta: {
+      requiresAuth: false,
+      requiresOrganization: false,
     },
   },
 ];

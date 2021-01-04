@@ -1,5 +1,9 @@
 <template>
-  <div id="app" class="p-4 bg-white overflow-hidden">
+  <div
+    id="app"
+    class="bg-white overflow-hidden"
+    :class="{ 'p-4': pageIsNotLandingPage }"
+  >
     <base-notification v-if="commonState.notification.show" />
     <base-prompt v-if="commonState.prompt.show" />
     <router-view />
@@ -13,6 +17,9 @@ import { CommonState } from "./types/common";
 @Component({ name: "App" })
 export default class App extends Vue {
   @State("common") commonState!: CommonState;
+  get pageIsNotLandingPage() {
+    return this.$router.currentRoute.name !== "LandingPage";
+  }
   mounted() {
     window.postMessage({ name: "loaded", value: true }, "*");
   }
