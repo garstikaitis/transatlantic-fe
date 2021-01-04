@@ -26,7 +26,13 @@
           v-if="keyToEdit !== key"
           @click="makeEditable(key, locale.value)"
         >
-          {{ locale.value }}
+          <template>
+            <span
+              v-html="translationValueWithStylizedVariables(locale.value)"
+              v-if="translationValueIncludesVariables(locale.value)"
+            ></span>
+            <span v-else>{{ locale.value }}</span>
+          </template>
         </div>
         <div
           class="flex items-center"
@@ -67,7 +73,7 @@ import {
   CreateTranslationRequest,
   UpdateTranslationRequest,
 } from "@/types/requests";
-import { update } from "lodash";
+import { split, update } from "lodash";
 
 @Component({
   name: "base-translation-card",
@@ -109,6 +115,28 @@ export default class BaseTranslationCard extends Vue {
 
   handleUpdateTranslation(value: string) {
     this.translationValueAfterEdit = value;
+  }
+
+  translationValueIncludesVariables(value: string): string[] | null {
+    return value.match(/\{(.*?)\}/gm);
+  }
+
+  translationValueWithStylizedVariables(value: string): string {
+    const variables = this.translationValueIncludesVariables(value);
+    if (variables) {
+      let translationHTML = "<span>";
+      const splittedOriginalString = value.split(" ");
+      console.log(splittedOriginalString, variables);
+      splittedOriginalString.forEach((word) => {
+        if (variables.includes(word)) {
+          translationHTML += `<span class="p-1 mr-1 text-xs bg-indigo-500 rounded text-white">${word} </span>`;
+        } else {
+          translationHTML += `<span>${word} </span>`;
+        }
+      });
+      return translationHTML;
+    }
+    return `<span>${value}</span>`;
   }
 
   handleSelect(data: boolean) {

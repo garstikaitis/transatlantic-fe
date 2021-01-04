@@ -4,7 +4,7 @@
     rows="3"
     :value="value"
     @input="$emit('input', $event.target.value)"
-    class="flex items-center justify-center base-textarea shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md border"
+    class="flex items-center justify-center base-textarea shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md border p-2"
   ></textarea>
 </template>
 

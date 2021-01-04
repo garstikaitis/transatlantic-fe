@@ -13,7 +13,7 @@
         :type="type"
         :required="required"
         :placeholder="placeholder"
-        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-l-md rounded-r-none"
+        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-l-md rounded-r-none p-2"
         @input="$emit('input', $event.target.value)"
         :value="value"
       />

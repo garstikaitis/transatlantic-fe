@@ -16,7 +16,7 @@
         <eva-icon name="file-add-outline" fill="white" />
         Upload from file
       </label>
-      <base-button @click="navigateToCreateTranslation">
+      <base-button class="items-center" @click="navigateToCreateTranslation">
         <eva-icon name="plus" fill="white" /> Create new</base-button
       >
     </div>
@@ -210,6 +210,6 @@ export default class Proejct extends Vue {
 
 <style lang="scss" scoped>
 .upload-label {
-  @apply .flex .justify-center .py-2 .px-4 .border .border-transparent .rounded-md .shadow-sm .text-sm .font-medium .text-white .bg-indigo-600 .cursor-pointer;
+  @apply flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 cursor-pointer items-center;
 }
 </style>

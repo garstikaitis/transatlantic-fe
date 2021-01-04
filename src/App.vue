@@ -47,7 +47,7 @@ body {
 .pretty {
   cursor: pointer;
   input {
-    @apply .border .rounded .cursor-pointer;
+    @apply border rounded cursor-pointer;
   }
 }
 </style>
