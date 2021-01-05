@@ -126,7 +126,6 @@ export default class BaseTranslationCard extends Vue {
     if (variables) {
       let translationHTML = "<span>";
       const splittedOriginalString = value.split(" ");
-      console.log(splittedOriginalString, variables);
       splittedOriginalString.forEach((word) => {
         if (variables.includes(word)) {
           translationHTML += `<span class="p-1 mr-1 text-xs bg-indigo-500 rounded text-white">${word} </span>`;
@@ -155,14 +154,6 @@ export default class BaseTranslationCard extends Vue {
   saveTranslation(localeId: number) {
     const translation = this.translationsState.allTranslations.find(
       (translation) => {
-        if (translation.transKey === this.translationKey) {
-          console.log(
-            translation.transKey,
-            this.translationKey,
-            translation.transValue,
-            this.translationValueBeforeEdit
-          );
-        }
         return (
           translation.transKey === this.translationKey &&
           translation.transValue === this.translationValueBeforeEdit

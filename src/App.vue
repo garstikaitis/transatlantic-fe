@@ -12,16 +12,68 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { State } from "vuex-class";
+import { Action, State } from "vuex-class";
+import router from "./router";
 import { CommonState } from "./types/common";
 @Component({ name: "App" })
 export default class App extends Vue {
   @State("common") commonState!: CommonState;
+  @Action("getTranslations", { namespace: "translations" })
+  getTranslations!: (input: {
+    projectId: number;
+    page: number;
+    searchValue?: string;
+  }) => Promise<boolean>;
   get pageIsNotLandingPage() {
     return this.$router.currentRoute.name !== "LandingPage";
   }
-  mounted() {
-    window.postMessage({ name: "loaded", value: true }, "*");
+  listenForInit() {
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "LOCASE__INIT_START") {
+        this.getTranslations({
+          projectId: event.data.value.projectId,
+          page: 1,
+        }).then((success) => {
+          if (success)
+            router.push({
+              name: "Project",
+              params: { id: event.data.value.projectId },
+            });
+        });
+      }
+    });
+  }
+  listenForTranslationSearch() {
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "LOCASE__SEARCH_TRANSLATION") {
+        console.log(event.data.value.searchValue);
+        this.getTranslations({
+          projectId: event.data.value.projectId,
+          page: 1,
+          searchValue: event.data.value.searchValue,
+        }).then((success) => {
+          if (success)
+            router.push({
+              name: "Project",
+              params: { id: event.data.value.projectId },
+            });
+        });
+      }
+    });
+  }
+  postLoadedMessage() {
+    window.parent.postMessage(
+      {
+        type: "LOCASE__LOADED",
+        value: true,
+      },
+      "http://localhost:8080"
+    );
+  }
+  created() {
+    this.listenForInit();
+    this.listenForTranslationSearch();
+    this.postLoadedMessage();
   }
 }
 </script>

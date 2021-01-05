@@ -119,12 +119,18 @@ export const actions: ActionTree<TranslationsState, RootState> = {
     }
     commit("SET_IS_LOADING", false);
   },
-  async getTranslations({ commit, state }, { projectId, page }) {
+  async getTranslations({ commit, state }, { projectId, page, searchValue }) {
     return new Promise(async (resolve, reject) => {
       commit("SET_IS_LOADING", true);
+      let valueToSearch = "";
+      if (searchValue) {
+        valueToSearch = searchValue;
+      } else {
+        valueToSearch = state.searchTerm;
+      }
       const data = await new TranslationsApi().getTranslations(
         projectId,
-        state.searchTerm,
+        valueToSearch,
         page
       );
       if (data.success) {
