@@ -1,6 +1,6 @@
 <template>
   <base-page
-    title="Translations"
+    :title="projectsState.activeProject.name"
     :show-pagination="true"
     class="pb-16 bg-gray-100"
   >
