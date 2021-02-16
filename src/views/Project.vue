@@ -8,10 +8,6 @@
     :show-pagination="true"
     class="pb-16 bg-gray-100"
   >
-    <ellipsis-loader
-      slot="content-loading"
-      v-if="translationsState.isLoading"
-    ></ellipsis-loader>
     <div class="flex items-center" slot="top-button">
       <input
         @change="handleFileChange"
@@ -28,7 +24,11 @@
         <eva-icon name="plus" fill="white" /> Create new</base-button
       >
     </div>
-    <template #content>
+    <ellipsis-loader
+      slot="content-loading"
+      v-if="translationsState.isLoading"
+    ></ellipsis-loader>
+    <template #content v-else>
       <div class="flex mb-4 w-full">
         <base-input-icon
           placeholder="Search for translation. Try searching key or value"
