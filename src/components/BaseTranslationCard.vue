@@ -18,7 +18,7 @@
         v-for="(locale, key) in translationsMerged"
         :key="locale.id"
       >
-        <div class="w-64" :class="{ 'font-bold': locale.isMainLocale }">
+        <div class="w-1/4" :class="{ 'font-bold': locale.isMainLocale }">
           {{ locale.locale }}
         </div>
         <div
@@ -35,7 +35,7 @@
           </template>
         </div>
         <div
-          class="flex items-center"
+          class="flex items-center w-3/4"
           v-else
           v-on-clickaway="setEditableKeyToNull"
         >

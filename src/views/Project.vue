@@ -1,9 +1,17 @@
 <template>
   <base-page
-    :title="projectsState.activeProject.name"
+    :title="
+      projectsState.activeProject
+        ? projectsState.activeProject.name
+        : 'Loading...'
+    "
     :show-pagination="true"
     class="pb-16 bg-gray-100"
   >
+    <ellipsis-loader
+      slot="content-loading"
+      v-if="translationsState.isLoading"
+    ></ellipsis-loader>
     <div class="flex items-center" slot="top-button">
       <input
         @change="handleFileChange"

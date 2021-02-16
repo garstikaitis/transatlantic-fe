@@ -19,8 +19,4 @@ export default class BaseTextarea extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-.base-textarea {
-  min-width: 32rem;
-}
-</style>
+<style scoped lang="scss"></style>
