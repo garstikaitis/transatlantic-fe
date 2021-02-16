@@ -67,7 +67,7 @@ export default class App extends Vue {
         type: "LOCASE__LOADED",
         value: true,
       },
-      "https://education.studentpulsestaging.com"
+      "https://education.studentpulse.io"
     );
   }
   created() {
