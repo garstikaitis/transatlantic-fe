@@ -28,7 +28,7 @@
       slot="content-loading"
       v-if="translationsState.isLoading"
     ></ellipsis-loader>
-    <template #content v-else>
+    <template #content>
       <div class="flex mb-4 w-full">
         <base-input-icon
           placeholder="Search for translation. Try searching key or value"
