@@ -217,6 +217,11 @@ export default class Proejct extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@media only screen and (max-width: 700px) {
+  .upload-label {
+    display: none;
+  }
+}
 .upload-label {
   @apply flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 cursor-pointer items-center;
 }
