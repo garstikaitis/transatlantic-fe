@@ -33,17 +33,6 @@
             <h3 class="mt-6 text-gray-900 text-sm font-medium">
               {{ organization.name }}
             </h3>
-            <dl class="mt-1 flex-grow flex flex-col justify-between">
-              <dt class="sr-only">Title</dt>
-              <dd class="text-gray-500 text-sm">Something</dd>
-              <dt class="sr-only">Role</dt>
-              <dd class="mt-3">
-                <span
-                  class="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full"
-                  >Something role</span
-                >
-              </dd>
-            </dl>
           </div>
           <div>
             <div class="-mt-px flex divide-x divide-gray-200">
