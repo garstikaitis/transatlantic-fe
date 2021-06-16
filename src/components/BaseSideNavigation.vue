@@ -12,7 +12,7 @@
           style="width: 40px; height: 30px;"
           :height="35"
           :width="35"
-          name="layers-outline"
+          name="home-outline"
           :fill="$route.name === 'Dashboard' ? '#5a67d8' : '#a3bffa'"
         ></eva-icon>
       </div>
@@ -28,7 +28,7 @@
           style="width: 40px; height: 30px;"
           :height="35"
           :width="35"
-          name="pantone-outline"
+          name="folder-outline"
           :fill="$route.name.includes('Project') ? '#5a67d8' : '#a3bffa'"
         ></eva-icon>
       </div>
@@ -44,7 +44,7 @@
           style="width: 40px; height: 30px;"
           :height="35"
           :width="35"
-          name="credit-card-outline"
+          name="pricetags-outline"
           :fill="$route.name.includes('Payment') ? '#5a67d8' : '#a3bffa'"
         ></eva-icon>
       </div>

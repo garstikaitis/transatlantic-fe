@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="bg-white overflow-hidden"
+    class="bg-white overflow-hidden font-display"
     :class="{ 'p-4': pageIsNotLandingPage }"
   >
     <base-notification v-if="commonState.notification.show" />
