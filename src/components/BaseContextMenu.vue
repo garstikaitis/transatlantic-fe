@@ -14,7 +14,7 @@
     >
       <div
         v-show="isActive"
-        class="origin-top-right absolute right-0 w-min-content rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50"
+        class="origin-top-right absolute right-0 w-max-content rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50"
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="user-menu"
@@ -22,7 +22,7 @@
         <div v-for="(action, index) in actions" :key="index">
           <router-link
             v-if="action.type === 'link'"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
             role="menuitem"
             :to="{ name: action.name, params: { ...action.params } }"
           >
@@ -30,7 +30,7 @@
           </router-link>
           <div
             v-else
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
             role="menuitem"
             @click="action.method"
           >

@@ -66,6 +66,7 @@
                           v-for="locale in projectToSave.locales"
                           :key="locale.id"
                           :class="{ 'font-bold': locale.pivot.isMainLocale }"
+                          v-tooltip="locale.pivot.isMainLocale ? 'Main locale' : ''"
                         >
                           {{ locale.name }}
                         </div>
@@ -116,7 +117,7 @@
                       <input
                         id="api-key"
                         readonly
-                        class="outline-none cursor-default"
+                        class="outline-none cursor-default w-1/3"
                         :value="apiKey"
                       />
                       <span

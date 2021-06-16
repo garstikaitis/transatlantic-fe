@@ -99,11 +99,9 @@
                       class="px-6 py-4 whitespace-nowrap"
                       @click="navigateToProject(project.id)"
                     >
-                      <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                      >
+                      <base-tag>
                         Active
-                      </span>
+                      </base-tag>
                     </td>
                     <td
                       @click="projectId = project.id"
@@ -186,9 +184,9 @@ export default class Projects extends Vue {
     this.showTooltipIndex = null;
   }
 
-  formatTimeStamp(timestamp: string): number {
+    formatTimeStamp(timestamp: string): number {
     return differenceInDays(Date.now(), new Date(timestamp));
-  }
+    }
 
   mounted() {
     setTimeout(() => {

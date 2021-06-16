@@ -4,7 +4,7 @@
   >
     <img :src="logo" style="width: 40px;" class="mb-12 mt-2" />
 
-    <router-link :to="{ name: 'Dashboard' }">
+    <router-link v-tooltip="'Dashboard'"  :to="{ name: 'Dashboard' }">
       <div class="mb-6 relative">
         <div v-if="$route.name === 'Dashboard'" class="activeIndicator"></div>
         <eva-icon
@@ -17,7 +17,7 @@
         ></eva-icon>
       </div>
     </router-link>
-    <router-link :to="{ name: 'Projects' }">
+    <router-link  v-tooltip="'Projects'":to="{ name: 'Projects' }">
       <div class="mb-6 relative">
         <div
           v-if="$route.name.includes('Project')"
@@ -33,7 +33,7 @@
         ></eva-icon>
       </div>
     </router-link>
-    <router-link :to="{ name: 'Payments' }">
+    <router-link v-tooltip="'Payment'" :to="{ name: 'Payments' }">
       <div class="mb-6 relative">
         <div
           v-if="$route.name.includes('Payment')"
@@ -57,6 +57,7 @@ import { AuthState } from "@/types/auth";
 import { OrganizationState } from "@/types/organizations";
 import { Vue, Component } from "vue-property-decorator";
 import { State } from "vuex-class";
+import defaultCompanyLogo from '../assets/company_logo_placeholder.svg';;
 
 @Component({ name: "base-side-navigation" })
 export default class BaseSideNavigation extends Vue {
@@ -67,7 +68,7 @@ export default class BaseSideNavigation extends Vue {
     if (this.organizationState.activeOrganization) {
       if (this.organizationState.activeOrganization!.logo)
         return this.organizationState.activeOrganization.logo;
-      else return require("@/assets/company_logo_placeholder.svg");
+      else return defaultCompanyLogo;
     }
   }
 }

@@ -86,12 +86,11 @@
 <script lang="ts">
 import { Organization, OrganizationState } from "@/types/organizations";
 import { ProjectsState } from "@/types/projects";
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { Action, Getter, Mutation, State } from "vuex-class";
-import axios from "axios";
 import "@/utils/axios";
 import router from "@/router";
-import { ro } from "date-fns/locale";
+import defaultCompanyLogo from '../assets/company_logo_placeholder.svg';
 
 @Component({ name: "SelectOrganization" })
 export default class SelectOrganization extends Vue {
@@ -106,10 +105,9 @@ export default class SelectOrganization extends Vue {
   setActiveOrganization!: (organization: Organization) => void;
 
   getCompanyLogo(organization: Organization): string {
-    console.log(organization);
     return organization.logo
       ? organization.logo
-      : require("../assets/company_logo_placeholder.svg");
+      : defaultCompanyLogo
   }
 
   handleSetActiveOrganization(organization: Organization) {
