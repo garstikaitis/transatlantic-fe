@@ -1,10 +1,11 @@
 import {
   CommonState,
+  Modal,
   Prompt,
   RootState,
   TransNotification,
 } from "@/types/common";
-import { Module, GetterTree, MutationTree } from "vuex";
+import { Module, MutationTree } from "vuex";
 
 const namespaced: boolean = true;
 

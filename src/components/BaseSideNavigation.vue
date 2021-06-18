@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 left-0 bg-white flex flex-col p-3 h-screen shadow z-50"
+    class="fixed top-0 left-0 bg-white flex flex-col p-3 h-screen shadow z-40"
   >
     <img :src="logo" style="width: 40px;" class="mb-12 mt-2" />
 
@@ -17,7 +17,7 @@
         ></eva-icon>
       </div>
     </router-link>
-    <router-link  v-tooltip="'Projects'":to="{ name: 'Projects' }">
+    <router-link  v-tooltip="'Projects'" :to="{ name: 'Projects' }">
       <div class="mb-6 relative">
         <div
           v-if="$route.name.includes('Project')"

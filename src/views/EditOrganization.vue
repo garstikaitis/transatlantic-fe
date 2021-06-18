@@ -95,7 +95,7 @@
                               'bg-red-300': user.pivot.invitation_status === 'EXPIRED',
                             }"
                            ></span>
-                            {{ user.pivot.invitation_status }}
+                            {{ invitationStatusMap[user.pivot.invitation_status] }}
                           </p>
                         </div>
                       </div>
@@ -114,14 +114,27 @@
                 </div>
               </div>
             </li>
-            <li v-for="user in organization.users" :key="user.id">
+            <li>
               <div class="block pb-1">
-                <base-button class="my-4 w-64 mx-auto ">Add extra users</base-button>
+                <base-button @click="showUserInviteModal = true" class="my-4 w-64 mx-auto ">Add extra users</base-button>
               </div>
             </li>
           </ul>
         </div>
       </div>
+    <base-modal @close="showUserInviteModal = false" v-if="showUserInviteModal">
+      <template #title>Invite user to {{ organization.name }}</template>
+      <template #description>Invited user will receive an email with further instructions</template>
+      <template #content>
+        <div class="flex items-center">
+          <base-input v-model="newUser.firstName" class="w-1/2" label="First name" />
+          <base-input class="my-3 w-1/2 pl-4" v-model="newUser.lastName" label="Last name" />
+        </div>
+        <base-input class="mb-2" v-model="newUser.email" label="Email" />
+        <base-select class="-mt-0 pb-4" :options="roles" label="Role" />
+      </template>
+      <template #button><base-button class="ml-2" @click="inviteUser">Send invitation</base-button></template>
+    </base-modal>
     </div>
   </base-page>
 </template>
@@ -130,9 +143,10 @@
 import { Organization } from "@/types/organizations";
 import { BaseResponse } from "@/types/responses";
 import { Component, Vue } from "vue-property-decorator";
-import { Action } from "vuex-class";
+import { Action, Mutation } from "vuex-class";
 import { formatDistance } from 'date-fns';
-import { BaseContextAction } from '@/types/common';
+import { BaseContextAction, Modal } from '@/types/common';
+import { User } from '@/types/user';
 
 @Component({ name: "edit-organization" })
 export default class EditOrganization extends Vue {
@@ -141,6 +155,19 @@ export default class EditOrganization extends Vue {
   newLogo: File | null = null;
   showFileUploader: boolean = true;
   tab: string = 'General';
+  roles: string[] = ['VIEWER', 'EDITOR'];
+  newUser = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    onboardingCompleted: true,
+  };
+  invitationStatusMap = {
+    PENDING: 'Invitation has not been accepted yet',
+    ACCEPTED: `Is a part of ${this.organization?.name}`,
+    EXPIRED: 'Invitation expired. Please send a new invitation mail'
+  }
+  showUserInviteModal = false;
    get actions(): BaseContextAction[] {
     return [
       {
@@ -153,23 +180,20 @@ export default class EditOrganization extends Vue {
         name: "ResendInvitationMail",
         displayName: "Resend invitation mail",
         type: "method",
+        method: () => this.resendInvitationMail(),
       },
       {
         name: "CopyInvitationLink",
         displayName: "Copy invitation link",
         type: "method",
+        method: () => this.copyInvitationLink(),
       },
       {
         name: "RemoveUser",
         displayName: "Remove from organization",
         type: "method",
+        method: () =>  this.removeUser(),
       },
-      // {
-      //   name: "DeleteProject",
-      //   displayName: "Delete",
-      //   type: "method",
-      //   method: () => this.deleteProject(this.projectId!),
-      // },
     ];
   }
   @Action("getOrganizationById", { namespace: "organizations" })
@@ -185,9 +209,20 @@ export default class EditOrganization extends Vue {
     newLogo: File | null;
   }) => void;
 
+  @Mutation("common/SET_MODAL")
+  setModal!: (modal: Modal) => void;
+
   formatDate(timestamp: string): string {
     return formatDistance(new Date(timestamp), Date.now(), { addSuffix: true });
   }
+
+  resendInvitationMail() {}
+
+  copyInvitationLink() {}
+
+  removeUser() {}
+
+  inviteUser() {}
 
   async mounted() {
     const { success, data } = await this.getOrganizationById({

@@ -12,6 +12,7 @@ export interface RootState {
 export interface CommonState {
   prompt: Prompt;
   notification: TransNotification;
+  modal: Modal;
 }
 
 export interface EloquentModel {
@@ -54,6 +55,10 @@ export interface Prompt {
   title: string;
   description: string;
   action: () => void;
+}
+
+export interface Modal {
+  show: boolean;
 }
 export interface TransNotification {
   show: boolean;
